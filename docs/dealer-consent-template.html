@@ -1,0 +1,207 @@
+<title>Dealer Data Consent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root {
+  --ink: #1c2024;
+  --ink-soft: #4a5057;
+  --paper: #f4f5f1;
+  --surface: #ffffff;
+  --rule: #d6d9d0;
+  --amber: #b7791f;
+  --amber-bg: #fbf3e4;
+  --teal: #0e6b6b;
+  --teal-bg: #e6f2f1;
+  --blank: #fff8e8;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ink: #e7e9e4; --ink-soft: #a9afa6; --paper: #15181b; --surface: #1d2125; --rule: #333a40;
+    --amber: #e0a547; --amber-bg: #2c2415; --teal: #5cc3c0; --teal-bg: #16292a; --blank: #2a2517;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #e7e9e4; --ink-soft: #a9afa6; --paper: #15181b; --surface: #1d2125; --rule: #333a40;
+  --amber: #e0a547; --amber-bg: #2c2415; --teal: #5cc3c0; --teal-bg: #16292a; --blank: #2a2517;
+}
+
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15.5px; line-height: 1.65; padding-inline: 16px; padding-block: 0 64px; }
+.wrap { max-width: 820px; margin: 0 auto; display: grid; gap: 22px; }
+header.top { padding-block: 40px 22px; border-bottom: 3px solid var(--ink); display: grid; gap: 10px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(36px, 6vw, 54px); line-height: 1; margin: 0; text-wrap: balance; }
+.lede { margin: 0; color: var(--ink-soft); font-size: 17px; max-width: 66ch; }
+.note { background: var(--amber-bg); border-left: 3px solid var(--amber); padding: 10px 14px; display: grid; gap: 4px; }
+.note strong { color: var(--amber); font-family: var(--display); font-size: 17px; letter-spacing: .03em; text-transform: uppercase; }
+
+.doc { background: var(--surface); border: 1px solid var(--rule); padding: clamp(18px, 4vw, 44px); display: grid; gap: 20px; }
+.doc h2 { font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 1.1; margin: 0; text-align: center; letter-spacing: .02em; text-wrap: balance; }
+.doc .sub { text-align: center; color: var(--ink-soft); margin: -12px 0 0; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 22px; line-height: 1.2; margin: 0; letter-spacing: .01em; }
+p { margin: 0; }
+.parties { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.party { border-top: 2px solid var(--ink); padding-top: 8px; display: grid; gap: 4px; }
+.party .role { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+
+ol.clauses { margin: 0; padding: 0; list-style: none; counter-reset: c; display: grid; gap: 16px; }
+ol.clauses > li { counter-increment: c; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 6px 10px; }
+ol.clauses > li::before { content: counter(c) "."; font-family: var(--display); font-weight: 700; font-size: 20px; line-height: 1.3; }
+ol.clauses > li > div { display: grid; gap: 6px; }
+ol.clauses strong.h { font-weight: 600; }
+ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+
+.blank { background: var(--blank); border-bottom: 1.5px dashed var(--amber); padding: 0 4px; font-style: italic; color: var(--ink-soft); white-space: nowrap; }
+.choice { display: grid; gap: 4px; padding-left: 2px; }
+.box { display: inline-block; width: 13px; height: 13px; border: 1.5px solid var(--ink); margin-right: 8px; vertical-align: -1px; }
+.legal { font-size: 14px; color: var(--ink-soft); border-left: 2px solid var(--rule); padding-left: 10px; }
+
+.tw { overflow-x: auto; border: 1px solid var(--rule); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; background: var(--paper); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+
+.sign { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; margin-top: 8px; }
+.sign div { display: grid; gap: 22px; }
+.sign .line { border-bottom: 1px solid var(--ink); height: 26px; }
+.sign .cap { font-size: 13px; color: var(--ink-soft); margin-top: -18px; }
+
+section.for-you { display: grid; gap: 12px; border-top: 3px solid var(--ink); padding-top: 18px; }
+section.for-you h2 { font-family: var(--display); font-weight: 700; font-size: 30px; margin: 0; }
+section.for-you li { max-width: 72ch; }
+footer { color: var(--ink-soft); font-size: 13px; }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">SSV Channel · Draft template · 28-Sep-2026</div>
+  <h1>Dealer data-sharing consent</h1>
+  <p class="lede">A letter each dealer signs before its Tally data starts flowing to the distributor. It says in plain words what the SSV agent sends, what it never sends, and how the dealer can stop it.</p>
+  <div class="note"><strong>Draft for legal review</strong><p>This is a starting point written from what the software actually does. It is not legal advice. Have your legal adviser review it, and fill the highlighted blanks, before any dealer signs it.</p></div>
+</header>
+
+<article class="doc">
+  <h2>Consent to share sales and stock data</h2>
+  <p class="sub">between the Dealer and the Distributor named below</p>
+
+  <div class="parties">
+    <div class="party"><span class="role">Distributor</span>
+      <p><span class="blank">[Distributor legal name]</span></p>
+      <p>Address: <span class="blank">[registered address]</span></p>
+      <p>GSTIN: <span class="blank">[GSTIN]</span></p></div>
+    <div class="party"><span class="role">Dealer</span>
+      <p><span class="blank">[Dealer legal name]</span></p>
+      <p>Address: <span class="blank">[registered address]</span></p>
+      <p>GSTIN: <span class="blank">[GSTIN]</span></p></div>
+  </div>
+
+  <ol class="clauses">
+    <li><div><strong class="h">Purpose.</strong>
+      <p>The Dealer allows the Distributor to receive, automatically from the Dealer's TallyPrime, the data listed in Annexure B. The Distributor may use it only to:</p>
+      <ul>
+        <li>see secondary sales and stock of its products by dealer, territory, item and customer;</li>
+        <li>plan supply, replenishment and schemes;</li>
+        <li>check that the data connection is working.</li>
+      </ul></div></li>
+
+    <li><div><strong class="h">Only the Distributor's products.</strong>
+      <p>The SSV agent on the Dealer's PC picks out the Distributor's items using the rule in Annexure A. Where a bill also has other brands' products, only the Distributor's lines are sent. Other distributors' products, bill totals and the Dealer's accounts never leave the PC.</p>
+      <p>If the Dealer also buys the same brands from another supplier, its sales of those items are sent too: Tally does not record which supplier a sold item came from.</p></div></li>
+
+    <li><div><strong class="h">Read only.</strong>
+      <p>The agent only reads from TallyPrime. It never enters, changes or deletes anything in the Dealer's books.</p></div></li>
+
+    <li><div><strong class="h">How the data travels.</strong>
+      <p>The agent sends data every <span class="blank">[5–1440]</span> minutes while the PC and TallyPrime are running. Every upload is:</p>
+      <ul>
+        <li>encrypted in transit (HTTPS);</li>
+        <li>signed with a secret key issued to this Dealer only.</li>
+      </ul>
+      <p>Where the Dealer buys from several distributors, uploads pass through the SSV hub. The hub delivers each distributor's share to that distributor only. It keeps no copy of the data, only a log of batch numbers and whether each was delivered.</p></div></li>
+
+    <li><div><strong class="h">Edits and deletions.</strong>
+      <p>Changes made in Tally are sent automatically. A bill deleted in Tally is marked as deleted and left out of all reports.</p></div></li>
+
+    <li><div><strong class="h">Use and access.</strong>
+      <p>Only the Distributor's authorised staff, and its IT service provider for hosting and support, may see the data.</p>
+      <p>The Distributor will not disclose one dealer's data to another dealer or to any third party, except where the law requires it. Totals across dealers (for example, by region) may be used within the Distributor.</p></div></li>
+
+    <li><div><strong class="h">Sharing with manufacturers.</strong>
+      <p>The Distributor may pass on to the manufacturers whose products it distributes:</p>
+      <div class="choice"><p><span class="box"></span>nothing from this Dealer's data. <em>(default)</em></p><p><span class="box"></span>totals per item and month, without customer names or details.</p><p><span class="box"></span>the same data it receives under this consent.</p></div></div></li>
+
+    <li><div><strong class="h">Stock values and margins.</strong>
+      <p>Closing stock is sent with its value, as calculated by the Dealer's own stock valuation in Tally. The Distributor's reports show an estimated customer margin, based on that value, only if the Dealer agrees here:</p>
+      <div class="choice"><p><span class="box"></span>Yes, the Distributor may see estimated margins.</p><p><span class="box"></span>No, do not show margins. <em>(default)</em></p></div></div></li>
+
+    <li><div><strong class="h">Customer and supplier details.</strong>
+      <p>For parties on bills that carry the Distributor's products, the agent sends the details kept in Tally: name, GSTIN, state and price level. For the phone number, address and PIN code, the Dealer chooses:</p>
+      <div class="choice"><p><span class="box"></span>Keep them on the Dealer's PC. <em>(recommended: a dealer's customers are mostly individuals)</em> The Distributor then deletes any it already holds.</p><p><span class="box"></span>Share them too.</p></div>
+      <p>The Dealer confirms that it may share what it sends for the purposes in clause 1. The Distributor:</p>
+      <div class="choice"><p><span class="box"></span>will not contact these parties using these details.</p><p><span class="box"></span>may contact them only about <span class="blank">[e.g. schemes and product information]</span>.</p></div>
+      <p class="legal">For legal review: a dealer's customers are often consumers. Their names, phones and addresses are personal data under India's Digital Personal Data Protection Act, 2023, and cash sales usually carry no customer at all.</p></div></li>
+
+    <li><div><strong class="h">Software on the Dealer's PC.</strong>
+      <p>The agent runs as a Windows service. It may update itself to versions the Distributor has approved, and checks each download's fingerprint (SHA-256) before installing. Automatic updates:</p>
+      <div class="choice"><p><span class="box"></span>Allowed.</p><p><span class="box"></span>Not allowed; the Dealer installs updates itself.</p></div></div></li>
+
+    <li><div><strong class="h">Keeping the data.</strong>
+      <p>The Distributor keeps the data for <span class="blank">[period, e.g. 3 years]</span>. It deletes the data within <span class="blank">[30]</span> days after this consent ends, unless the law requires it to be kept longer.</p></div></li>
+
+    <li><div><strong class="h">Stopping.</strong>
+      <p>Either party may end this consent with <span class="blank">[15]</span> days' written notice. The Dealer may also stop the flow at once by uninstalling the agent. Either way, the Distributor disables the Dealer's key.</p></div></li>
+
+    <li><div><strong class="h">If something goes wrong.</strong>
+      <p>Each party tells the other promptly if it suspects that the key or the data has been exposed. The Distributor then issues a new key.</p></div></li>
+  </ol>
+
+  <div class="sign">
+    <div><p><strong>For the Distributor</strong></p><span class="line"></span><span class="cap">Signature, name, designation</span><span class="line"></span><span class="cap">Date</span></div>
+    <div><p><strong>For the Dealer</strong></p><span class="line"></span><span class="cap">Signature, name, designation</span><span class="line"></span><span class="cap">Date</span></div>
+  </div>
+
+  <h3>Annexure A: settings for this dealer</h3>
+  <div class="tw"><table>
+    <tbody>
+      <tr><td>Dealer ID</td><td><span class="blank">[e.g. DIST-001, as in the Distributor's ERPNext]</span></td></tr>
+      <tr><td>Tally company</td><td><span class="blank">[exact company name in TallyPrime]</span></td></tr>
+      <tr><td>Distributor's items</td><td>Stock group <span class="blank">[e.g. Ceat Tyre]</span> and all its sub-groups <span class="blank">[plus any other groups, categories or items]</span></td></tr>
+      <tr><td>Sync interval</td><td>Every <span class="blank">[minutes]</span></td></tr>
+      <tr><td>Route</td><td><span class="blank">[direct to the Distributor's ERPNext / through the SSV hub]</span></td></tr>
+    </tbody></table></div>
+
+  <h3>Annexure B: exactly what is shared</h3>
+  <div class="tw"><table>
+    <thead><tr><th>What</th><th>Fields</th><th>Limited to</th></tr></thead>
+    <tbody>
+      <tr><td>Items</td><td>Name, part number, HSN code, GST rate, unit, stock group and its parent groups, stock category</td><td>The Distributor's items</td></tr>
+      <tr><td>Bills</td><td>Date, voucher type, bill number, reference number, cancelled or deleted, party name. Per line: item, quantity (actual and billed), unit, rate, discount %, amount, godown, batch, manufacturing date, expiry, link to a delivery or receipt note</td><td>Lines of the Distributor's items on sales, credit notes, purchases, debit notes, delivery and receipt notes, rejections, stock journals and physical stock</td></tr>
+      <tr><td>Parties</td><td>Name, ledger group, GSTIN, state, price level. Phone, address and PIN code only if the Dealer shares them (clause 9)</td><td>Parties on those bills</td></tr>
+      <tr><td>Stock</td><td>Opening and closing quantity and value per item; closing quantity and value per godown</td><td>The Distributor's items</td></tr>
+      <tr><td>Connection</td><td>Agent version, sync times, run result and error text, number of records sent, Tally company name and ID</td><td>None</td></tr>
+    </tbody></table></div>
+  <p><strong>Never shared:</strong> other distributors' items and their bill lines; bill totals, taxes and ledger entries; outstanding balances, receipts and payments; bank, cash and payroll; any other data in Tally.</p>
+</article>
+
+<section class="for-you">
+  <h2>Before you send it: for the distributor</h2>
+  <ul>
+    <li><strong>Decide the blanks:</strong> how long you keep data, the notice period, and whether your team may contact customers.</li>
+    <li><strong>Margins default to No.</strong> Tick <em>Shares Cost Price</em> on the SSV Dealer only when the dealer ticked Yes in clause 8.</li>
+    <li><strong>Record the date.</strong> Keep the signed copy, and enter its date in <em>Data Sharing Consent Date</em> on the SSV Dealer. Do this before sending the agent secret.</li>
+    <li><strong>Automatic updates:</strong> if the dealer chose "Not allowed" in clause 10, untick <em>Update Agent Automatically</em> on the SSV Dealer.</li>
+    <li><strong>If the dealer keeps contacts on its PC (clause 9):</strong> on the agent's setup page, Options, untick <em>Send retailers' phone, address and PIN code</em> (agent 0.6.0 or later). On its next sync, your site deletes the phone numbers, addresses and PIN codes it holds for that dealer. The SSV Dealer then shows <em>Customer Contacts Withheld</em>. Reports keep working from names and states.</li>
+    <li><strong>When consent ends (clauses 11 and 12):</strong> untick <em>Enabled</em> on the SSV Dealer, then <em>Actions → Delete Channel Data</em>. That deletes everything received from that dealer and replaces its agent's secret. The record keeps a note of who deleted what, and when.</li>
+    <li><strong>Keep Annexure B true.</strong> It matches agent 0.5.1. Review it whenever the agent starts sending anything new.</li>
+  </ul>
+</section>
+
+<footer>SSV Channel · template generated from agent 0.5.1's actual upload fields · review by your legal adviser before use</footer>
+</div>

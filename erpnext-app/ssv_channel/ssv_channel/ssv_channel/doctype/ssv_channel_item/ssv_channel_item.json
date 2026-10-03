@@ -1,0 +1,217 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-09-24 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "distributor",
+  "tally_company",
+  "tally_item_name",
+  "tally_item_guid",
+  "tally_master_id",
+  "cb1",
+  "group_path",
+  "stock_category",
+  "unit",
+  "part_no",
+  "hsn_code",
+  "gst_rate",
+  "mapping_section",
+  "item_code",
+  "mapping_status",
+  "suggested_item",
+  "suggestion_score",
+  "conversion_factor",
+  "stock_section",
+  "closing_qty",
+  "closing_value",
+  "stock_as_of"
+ ],
+ "fields": [
+  {
+   "fieldname": "distributor",
+   "fieldtype": "Link",
+   "label": "Distributor",
+   "options": "SSV Distributor",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "tally_company",
+   "fieldtype": "Link",
+   "label": "Tally Company",
+   "options": "SSV Tally Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tally_item_name",
+   "fieldtype": "Data",
+   "label": "Item Name in Tally",
+   "reqd": 1,
+   "in_list_view": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "tally_item_guid",
+   "fieldtype": "Data",
+   "label": "Tally GUID"
+  },
+  {
+   "fieldname": "tally_master_id",
+   "fieldtype": "Int",
+   "label": "Tally Master ID"
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "group_path",
+   "fieldtype": "Data",
+   "label": "Stock Group Path"
+  },
+  {
+   "fieldname": "stock_category",
+   "fieldtype": "Data",
+   "label": "Stock Category"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit"
+  },
+  {
+   "fieldname": "part_no",
+   "fieldtype": "Data",
+   "label": "Part No"
+  },
+  {
+   "fieldname": "hsn_code",
+   "fieldtype": "Data",
+   "label": "HSN Code"
+  },
+  {
+   "fieldname": "gst_rate",
+   "fieldtype": "Float",
+   "label": "GST Rate"
+  },
+  {
+   "fieldname": "mapping_section",
+   "fieldtype": "Section Break",
+   "label": "Mapping to your Item"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "mapping_status",
+   "fieldtype": "Select",
+   "label": "Mapping Status",
+   "options": "Unmapped\nMapped\nIgnored",
+   "default": "Unmapped",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "suggested_item",
+   "fieldtype": "Link",
+   "label": "Suggested Item",
+   "options": "Item",
+   "read_only": 1,
+   "in_list_view": 1,
+   "depends_on": "eval:doc.mapping_status == 'Unmapped'",
+   "description": "Closest match by name, sizes and part number. Check it, then press Use Suggestion (or select many in the list: Actions → Accept Suggested Items)."
+  },
+  {
+   "fieldname": "suggestion_score",
+   "fieldtype": "Percent",
+   "label": "Match",
+   "read_only": 1,
+   "in_list_view": 1,
+   "depends_on": "eval:doc.mapping_status == 'Unmapped'"
+  },
+  {
+   "fieldname": "conversion_factor",
+   "fieldtype": "Float",
+   "label": "Conversion Factor",
+   "default": "1",
+   "precision": "6",
+   "description": "Your Item's units in one unit of this Tally item. Tally sells cases of 24 and your Item counts pieces: 24. Tally sells pieces and your Item counts cases of 24: 1 ÷ 24 = 0.041667. Reports convert quantities with it, past ones included; values are not changed."
+  },
+  {
+   "fieldname": "stock_section",
+   "fieldtype": "Section Break",
+   "label": "Latest closing stock"
+  },
+  {
+   "fieldname": "closing_qty",
+   "fieldtype": "Float",
+   "label": "Closing Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "closing_value",
+   "fieldtype": "Currency",
+   "label": "Closing Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_as_of",
+   "fieldtype": "Date",
+   "label": "Stock As Of",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "links": [],
+ "modified": "2026-09-24 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SSV Channel",
+ "name": "SSV Channel Item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Sales Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "Sales User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "hash",
+ "title_field": "tally_item_name",
+ "search_fields": "tally_item_name,item_code",
+ "naming_rule": "Random"
+}

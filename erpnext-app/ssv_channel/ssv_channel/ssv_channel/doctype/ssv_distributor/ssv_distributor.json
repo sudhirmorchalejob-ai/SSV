@@ -1,0 +1,261 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-09-24 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "distributor_id",
+  "distributor_name",
+  "enabled",
+  "partner_level",
+  "parent_distributor",
+  "cb1",
+  "customer",
+  "territory",
+  "agent_secret",
+  "consent_section",
+  "data_sharing_consent_date",
+  "share_cost_price",
+  "retailer_contacts_withheld",
+  "rules_section",
+  "rules",
+  "agent_section",
+  "sync_interval_minutes",
+  "sync_requested_at",
+  "auto_update",
+  "agent_version",
+  "last_contact_at",
+  "cb_agent",
+  "last_run_at",
+  "last_run_status",
+  "last_run_problem",
+  "last_ok_run_at",
+  "last_seen_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "distributor_id",
+   "fieldtype": "Data",
+   "label": "Distributor ID",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "description": "Put the same value in DISTRIBUTOR_ID in the agent's .env"
+  },
+  {
+   "fieldname": "distributor_name",
+   "fieldtype": "Data",
+   "label": "Distributor Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "partner_level",
+   "fieldtype": "Select",
+   "label": "Level",
+   "options": "Distributor\nDealer",
+   "default": "Distributor",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "description": "Dealer: buys from one of your distributors and sells to consumers. Its figures are tertiary sales and are reported separately from distributors' (Level filter in every report)."
+  },
+  {
+   "fieldname": "parent_distributor",
+   "fieldtype": "Link",
+   "label": "Buys From Distributor",
+   "options": "SSV Distributor",
+   "depends_on": "eval:doc.partner_level=='Dealer'",
+   "mandatory_depends_on": "eval:doc.partner_level=='Dealer'",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Link",
+   "label": "Territory",
+   "options": "Territory",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "agent_secret",
+   "fieldtype": "Password",
+   "label": "Agent Secret",
+   "description": "Leave blank to generate one. Use Actions > Show Agent Secret, then put it in AGENT_SECRET in the agent's .env"
+  },
+  {
+   "fieldname": "consent_section",
+   "fieldtype": "Section Break",
+   "label": "Data sharing"
+  },
+  {
+   "fieldname": "data_sharing_consent_date",
+   "fieldtype": "Date",
+   "label": "Data Sharing Consent Date",
+   "description": "Date the distributor agreed to share data with this principal"
+  },
+  {
+   "fieldname": "share_cost_price",
+   "fieldtype": "Check",
+   "label": "Shares Cost Price",
+   "default": "0",
+   "description": "Allow cost and margin for this distributor's retailer sales in reports (needs SSV Settings → Show Cost And Margin)."
+  },
+  {
+   "fieldname": "retailer_contacts_withheld",
+   "fieldtype": "Check",
+   "label": "Retailer Contacts Withheld",
+   "default": "0",
+   "read_only": 1,
+   "description": "Set by the agent (0.5.1+): the distributor keeps retailers' phone, address and PIN code on its PC. Contacts received earlier have been deleted."
+  },
+  {
+   "fieldname": "rules_section",
+   "fieldtype": "Section Break",
+   "label": "Which Tally items belong to this principal"
+  },
+  {
+   "fieldname": "rules",
+   "fieldtype": "Table",
+   "label": "Rules",
+   "options": "SSV Distributor Rule"
+  },
+  {
+   "fieldname": "agent_section",
+   "fieldtype": "Section Break",
+   "label": "Agent"
+  },
+  {
+   "fieldname": "sync_interval_minutes",
+   "fieldtype": "Int",
+   "label": "Sync Every (Minutes)",
+   "default": "5",
+   "description": "5 to 1440 (once a day). A running agent picks up a change within about 2 minutes. Blank = the agent's own setting."
+  },
+  {
+   "fieldname": "sync_requested_at",
+   "fieldtype": "Datetime",
+   "label": "Sync Requested At",
+   "read_only": 1,
+   "description": "Set by the Sync Now button"
+  },
+  {
+   "fieldname": "auto_update",
+   "fieldtype": "Check",
+   "label": "Update Agent Automatically",
+   "default": "1",
+   "description": "Install the approved agent version from SSV Settings on this distributor's PC."
+  },
+  {
+   "fieldname": "agent_version",
+   "fieldtype": "Data",
+   "label": "Agent Version",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_contact_at",
+   "fieldtype": "Datetime",
+   "label": "Last Contact",
+   "read_only": 1,
+   "description": "Last signed request from the agent of any kind"
+  },
+  {
+   "fieldname": "cb_agent",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_run_at",
+   "fieldtype": "Datetime",
+   "label": "Last Run",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_run_status",
+   "fieldtype": "Select",
+   "label": "Last Run Status",
+   "options": "\nOK\nFailed",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "last_run_problem",
+   "fieldtype": "Small Text",
+   "label": "Last Run Problem",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_ok_run_at",
+   "fieldtype": "Datetime",
+   "label": "Last Successful Run",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_seen_at",
+   "fieldtype": "Datetime",
+   "label": "Last Data Received",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "links": [],
+ "modified": "2026-09-29 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SSV Channel",
+ "name": "SSV Distributor",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Sales Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "Sales User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:distributor_id",
+ "title_field": "distributor_name",
+ "search_fields": "distributor_name,territory",
+ "naming_rule": "By fieldname"
+}

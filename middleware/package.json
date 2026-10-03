@@ -1,0 +1,15 @@
+{
+  "name": "ssv-hub",
+  "version": "0.1.0",
+  "description": "SSV middleware: routes each distributor's agent to every manufacturer it sells for. No dependencies beyond Node.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "admin": "node src/admin.js",
+    "test": "node --test"
+  }
+}

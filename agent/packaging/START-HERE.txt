@@ -1,0 +1,38 @@
+SSV Tally Connector: installing on a distributor's or dealer's PC
+
+The agent reads TallyPrime on this PC and sends only the items of the company it
+reports to (a manufacturer, or your distributor) to that company's site. Other brands,
+bill totals and accounts never leave this PC.
+
+------------------------------------------------------------------
+1. TALLYPRIME (on this PC)
+   F1 Help > Settings > Connectivity > Client/Server configuration:
+       TallyPrime acts as = Both,  Port = 9000.  Accept, restart TallyPrime.
+   Keep TallyPrime open with your company loaded while you work, as usual.
+
+2. INSTALL
+   Unzip this package into any folder and double-click  install.cmd
+   Accept the Windows prompt (administrator rights are needed once).
+   The installer:
+     - installs the "SSV Tally Connector" Windows service (starts with Windows),
+     - creates a setup password and shows it: WRITE IT DOWN,
+     - puts an "SSV Agent Setup" shortcut on the desktop, and opens the setup page.
+
+3. SETUP PAGE   (desktop shortcut "SSV Agent Setup", or http://127.0.0.1:4100)
+   Sign in with the setup password, then:
+     Connection  paste the lines from the site
+                 (the site shows them under Actions > Show Agent Secret),
+                 press "Test connection", then "Save and restart".
+     Tally       press "Check Tally and list companies", pick your company,
+                 "Save and restart".
+     Status      shows the last sync, what is waiting, and a "Sync now" button.
+   That is all. The agent now syncs every few minutes by itself.
+
+------------------------------------------------------------------
+Forgot the setup password?  It is LOCAL_API_TOKEN in
+   C:\ProgramData\SSVConnector\.env   (open Notepad as administrator to read it).
+Log:     C:\ProgramData\SSVConnector\logs\agent.log  (also on the setup page, Log tab)
+Update:  automatic, when the site approves a new version. By hand: run the new install.cmd.
+Remove:  uninstall.cmd in C:\Program Files\SSV Agent  (add -Purge to delete settings and data).
+Windows may say "Windows protected your PC" (not code-signed yet): More info > Run anyway.
+Commands for support staff:  ssv-agent.exe --help

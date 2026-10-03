@@ -1,0 +1,116 @@
+// Voucher XML shaped like TallyPrime's collection export.
+
+export const SALES_MIXED = `<ENVELOPE><BODY><DATA><COLLECTION>
+<VOUCHER REMOTEID="guid-sale-1" VCHTYPE="GST Sales">
+  <GUID>guid-sale-1</GUID>
+  <MASTERID> 101</MASTERID>
+  <ALTERID> 5001</ALTERID>
+  <DATE>20260915</DATE>
+  <VOUCHERTYPENAME>GST Sales</VOUCHERTYPENAME>
+  <VOUCHERNUMBER>INV/101</VOUCHERNUMBER>
+  <PARTYLEDGERNAME>Sharma Kirana Store</PARTYLEDGERNAME>
+  <ISCANCELLED>No</ISCANCELLED>
+  <ISOPTIONAL>No</ISOPTIONAL>
+  <ISINVOICE>Yes</ISINVOICE>
+  <ALLLEDGERENTRIES.LIST>
+    <LEDGERNAME>Sharma Kirana Store</LEDGERNAME>
+    <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+    <AMOUNT>-1,610.00</AMOUNT>
+  </ALLLEDGERENTRIES.LIST>
+  <ALLLEDGERENTRIES.LIST>
+    <LEDGERNAME>Sales GST 18%</LEDGERNAME>
+    <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+    <AMOUNT>1,610.00</AMOUNT>
+  </ALLLEDGERENTRIES.LIST>
+  <ALLINVENTORYENTRIES.LIST>
+    <STOCKITEMNAME>Dant Kanti 100g</STOCKITEMNAME>
+    <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+    <RATE>55.00/Nos</RATE>
+    <AMOUNT>1,100.00</AMOUNT>
+    <ACTUALQTY> 22 Nos</ACTUALQTY>
+    <BILLEDQTY> 20 Nos</BILLEDQTY>
+    <BATCHALLOCATIONS.LIST>
+      <GODOWNNAME>Main Location</GODOWNNAME>
+      <BATCHNAME>B-0926</BATCHNAME>
+      <AMOUNT>660.00</AMOUNT>
+      <ACTUALQTY> 14 Nos</ACTUALQTY>
+      <BILLEDQTY> 12 Nos</BILLEDQTY>
+    </BATCHALLOCATIONS.LIST>
+    <BATCHALLOCATIONS.LIST>
+      <GODOWNNAME>Godown 2</GODOWNNAME>
+      <BATCHNAME>B-0826</BATCHNAME>
+      <AMOUNT>440.00</AMOUNT>
+      <ACTUALQTY> 8 Nos</ACTUALQTY>
+      <BILLEDQTY> 8 Nos</BILLEDQTY>
+    </BATCHALLOCATIONS.LIST>
+  </ALLINVENTORYENTRIES.LIST>
+  <ALLINVENTORYENTRIES.LIST>
+    <STOCKITEMNAME>Colgate Strong Teeth 200g</STOCKITEMNAME>
+    <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+    <RATE>102.00/Nos</RATE>
+    <AMOUNT>510.00</AMOUNT>
+    <ACTUALQTY> 5 Nos</ACTUALQTY>
+    <BILLEDQTY> 5 Nos</BILLEDQTY>
+  </ALLINVENTORYENTRIES.LIST>
+  <ALLINVENTORYENTRIES.LIST>
+    <STOCKITEMNAME>Dant Kanti Sample 20g</STOCKITEMNAME>
+    <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+    <AMOUNT>0</AMOUNT>
+    <ACTUALQTY> 0 Nos</ACTUALQTY>
+    <BILLEDQTY> 0 Nos</BILLEDQTY>
+  </ALLINVENTORYENTRIES.LIST>
+  <INVENTORYENTRIES.LIST>
+    <STOCKITEMNAME>Dant Kanti 100g</STOCKITEMNAME>
+    <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+    <AMOUNT>1,100.00</AMOUNT>
+    <ACTUALQTY> 22 Nos</ACTUALQTY>
+    <BILLEDQTY> 20 Nos</BILLEDQTY>
+  </INVENTORYENTRIES.LIST>
+</VOUCHER>
+</COLLECTION></DATA></BODY></ENVELOPE>`;
+
+export const CREDIT_NOTE = `<ENVELOPE><BODY><DATA><COLLECTION>
+<VOUCHER REMOTEID="guid-cn-1" VCHTYPE="Credit Note">
+  <GUID>guid-cn-1</GUID>
+  <MASTERID> 102</MASTERID>
+  <ALTERID> 5002</ALTERID>
+  <DATE>20260918</DATE>
+  <VOUCHERTYPENAME>Credit Note</VOUCHERTYPENAME>
+  <VOUCHERNUMBER>CN/7</VOUCHERNUMBER>
+  <PARTYLEDGERNAME>Sharma Kirana Store</PARTYLEDGERNAME>
+  <ALLINVENTORYENTRIES.LIST>
+    <STOCKITEMNAME>Dant Kanti 100g</STOCKITEMNAME>
+    <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+    <RATE>55.00/Nos</RATE>
+    <AMOUNT>-110.00</AMOUNT>
+    <ACTUALQTY> 2 Nos</ACTUALQTY>
+    <BILLEDQTY> 2 Nos</BILLEDQTY>
+  </ALLINVENTORYENTRIES.LIST>
+</VOUCHER>
+</COLLECTION></DATA></BODY></ENVELOPE>`;
+
+export const STOCK_GROUPS = [
+  { name: "Patanjali", parent: "Primary" },
+  { name: "Patanjali Oral Care", parent: "Patanjali" },
+  { name: "Colgate Palmolive", parent: "Primary" },
+  { name: "Unbranded", parent: "Primary" },
+];
+
+export const STOCK_ITEMS = [
+  { name: "Dant Kanti 100g", group: "Patanjali Oral Care", category: null },
+  { name: "Dant Kanti Sample 20g", group: "Unbranded", category: "Patanjali Samples" },
+  { name: "Colgate Strong Teeth 200g", group: "Colgate Palmolive", category: null },
+  { name: "Loose Rice 1kg", group: "Unbranded", category: null },
+];
+
+export const RULES = [
+  { code: "PATANJALI", stockGroups: ["Patanjali"], stockCategories: ["Patanjali Samples"] },
+  { code: "COLGATE", stockGroups: ["Colgate Palmolive"] },
+];
+
+export const VOUCHER_TYPES = [
+  { name: "Sales", parent: "Sales" },
+  { name: "GST Sales", parent: "Sales" },
+  { name: "Credit Note", parent: "Credit Note" },
+  { name: "Sales Order", parent: "Sales Order" },
+];

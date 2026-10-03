@@ -1,0 +1,511 @@
+<title>SSV Pilot Runbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87,500;87,650;87,750&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F4F6F4; --surface:#FFFFFF; --sunk:#E9EEEA; --code:#EEF2EF;
+  --ink:#18221F; --ink-2:#44524D; --ink-3:#6B7A74;
+  --rule:#D3DBD6; --accent:#0E6655; --accent-soft:#DCEDE8; --on-accent:#FFFFFF;
+  --bench:#1F5FA8; --bench-bg:#E3ECF8;
+  --desk:#0E6655; --desk-bg:#DCEDE8;
+  --tally:#6B4FA0; --tally-bg:#ECE6F6;
+  --pc:#9A5B0B; --pc-bg:#FBEFD9;
+  --ok:#1E7A45; --ok-bg:#DFF1E6;
+  --warn:#9A5B0B; --warn-bg:#FBEFD9;
+  --crit:#A33A2B; --crit-bg:#F8E3DF;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#111715; --surface:#18201D; --sunk:#1F2925; --code:#1B2421;
+    --ink:#E2E9E5; --ink-2:#B3C0BA; --ink-3:#86958F;
+    --rule:#2E3A35; --accent:#5EC2AC; --accent-soft:#1D3530; --on-accent:#0B1210;
+    --bench:#8DB6E8; --bench-bg:#1C2A3C; --desk:#5EC2AC; --desk-bg:#1D3530;
+    --tally:#BCA6E6; --tally-bg:#2A2239; --pc:#E8B36A; --pc-bg:#35291A;
+    --ok:#6FD39A; --ok-bg:#16301F; --warn:#E8B36A; --warn-bg:#35291A; --crit:#EE9A8C; --crit-bg:#3A221E;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#111715; --surface:#18201D; --sunk:#1F2925; --code:#1B2421;
+  --ink:#E2E9E5; --ink-2:#B3C0BA; --ink-3:#86958F;
+  --rule:#2E3A35; --accent:#5EC2AC; --accent-soft:#1D3530; --on-accent:#0B1210;
+  --bench:#8DB6E8; --bench-bg:#1C2A3C; --desk:#5EC2AC; --desk-bg:#1D3530;
+  --tally:#BCA6E6; --tally-bg:#2A2239; --pc:#E8B36A; --pc-bg:#35291A;
+  --ok:#6FD39A; --ok-bg:#16301F; --warn:#E8B36A; --warn-bg:#35291A; --crit:#EE9A8C; --crit-bg:#3A221E;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.6;padding-inline:20px;padding-block:0 72px}
+.shell{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:40px}
+@media (min-width:1080px){.shell{grid-template-columns:220px minmax(0,1fr)}}
+nav.rail{display:none}
+@media (min-width:1080px){nav.rail{display:block;position:sticky;top:env(safe-area-inset-top,0px);align-self:start;padding-top:40px;max-height:100vh;overflow:auto}}
+nav.rail p{font-family:var(--f-display);font-stretch:87%;font-weight:650;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+nav.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+nav.rail a{display:grid;grid-template-columns:24px 1fr;gap:6px;padding:5px 8px;border-radius:6px;color:var(--ink-2);text-decoration:none;font-size:13.5px;line-height:1.35}
+nav.rail a:hover,nav.rail a:focus-visible{background:var(--sunk);color:var(--ink)}
+nav.rail a b{font-family:var(--f-mono);font-weight:500;color:var(--accent)}
+nav.rail .sep{height:1px;background:var(--rule);margin:8px 8px}
+main{min-width:0;max-width:860px}
+header.top{padding-top:44px;padding-bottom:26px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--f-mono);font-size:12.5px;color:var(--accent);letter-spacing:.04em;margin:0 0 12px}
+h1{font-family:var(--f-display);font-stretch:87%;font-weight:750;font-size:clamp(30px,4.4vw,44px);line-height:1.05;letter-spacing:-.015em;margin:0 0 14px;text-wrap:balance}
+.lede{font-size:17px;color:var(--ink-2);max-width:64ch;margin:0 0 18px}
+.where{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--ink-3);align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-mono);font-size:11px;font-weight:500;line-height:1;padding:4px 7px;border-radius:4px;white-space:nowrap;vertical-align:1px}
+.chip.bench{color:var(--bench);background:var(--bench-bg)}
+.chip.desk{color:var(--desk);background:var(--desk-bg)}
+.chip.tally{color:var(--tally);background:var(--tally-bg)}
+.chip.pc{color:var(--pc);background:var(--pc-bg)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{color:var(--ok);background:var(--ok-bg)}
+.pill.warn{color:var(--warn);background:var(--warn-bg)}
+.pill.crit{color:var(--crit);background:var(--crit-bg)}
+section{padding-top:44px;scroll-margin-top:12px}
+h2{font-family:var(--f-display);font-stretch:87%;font-weight:750;font-size:27px;line-height:1.15;margin:0 0 6px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;text-wrap:balance}
+h2 .n{font-family:var(--f-mono);font-weight:500;font-size:14px;color:var(--on-accent);background:var(--accent);border-radius:5px;padding:2px 8px;transform:translateY(-4px)}
+.sub{color:var(--ink-3);margin:0 0 18px;font-size:14.5px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+h3{font-family:var(--f-display);font-stretch:87%;font-weight:650;font-size:18.5px;margin:26px 0 8px;text-wrap:balance}
+p{margin:0 0 12px;max-width:70ch}
+ul,ol{margin:0 0 14px;padding-left:22px;max-width:72ch}
+li{margin-bottom:6px}
+li::marker{color:var(--ink-3)}
+a{color:var(--accent)}
+code{font-family:var(--f-mono);font-size:.87em;background:var(--sunk);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+kbd{font-family:var(--f-mono);font-size:.82em;border:1px solid var(--rule);border-bottom-width:2px;background:var(--surface);border-radius:4px;padding:0 5px;white-space:nowrap}
+.tw{overflow-x:auto;margin:6px 0 18px;border:1px solid var(--rule);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.45}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--rule)}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--f-display);font-stretch:87%;font-weight:650;font-size:13px;letter-spacing:.02em;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
+td b{font-weight:600}
+.code{position:relative;margin:8px 0 16px;border:1px solid var(--rule);border-radius:8px;background:var(--code)}
+.code .cap{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px 6px 12px;border-bottom:1px solid var(--rule);font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3)}
+.code pre{margin:0;padding:12px 14px;overflow-x:auto;font-family:var(--f-mono);font-size:13px;line-height:1.55;color:var(--ink)}
+.code pre .c{color:var(--ink-3)}
+.copy{font:500 12px var(--f-body);color:var(--accent);background:transparent;border:1px solid var(--rule);border-radius:5px;padding:3px 9px;cursor:pointer}
+.copy:hover{background:var(--accent-soft)}
+.copy:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.note{border:1px solid var(--rule);border-left:4px solid var(--accent);background:var(--surface);border-radius:6px;padding:12px 16px;margin:14px 0 18px}
+.note.warn{border-left-color:var(--warn)}
+.note.crit{border-left-color:var(--crit)}
+.note p:last-child,.note ul:last-child{margin-bottom:0}
+.note .t{font-weight:600;margin:0 0 4px}
+.status{display:grid;gap:0;border:1px solid var(--rule);border-radius:8px;background:var(--surface);margin:18px 0 6px;overflow:hidden}
+.status .row{display:grid;grid-template-columns:minmax(0,190px) 96px minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 14px;border-bottom:1px solid var(--rule)}
+.status .row:last-child{border-bottom:0}
+.status .k{font-weight:600}
+.status .v{color:var(--ink-2);font-size:14px}
+@media (max-width:620px){.status .row{grid-template-columns:1fr auto}.status .v{grid-column:1 / -1}}
+.dg{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 12px;margin:8px 0 6px}
+.dg pre.mermaid{margin:0;background:transparent;text-align:center;font-size:13px}
+.checks{list-style:none;padding:0;margin:8px 0 18px;display:grid;gap:0;border:1px solid var(--rule);border-radius:8px;background:var(--surface);max-width:none}
+.checks li{display:grid;grid-template-columns:24px minmax(0,1fr) minmax(0,1.1fr);gap:12px;padding:11px 14px;border-bottom:1px solid var(--rule);margin:0}
+.checks li:last-child{border-bottom:0}
+.checks input{width:17px;height:17px;margin-top:3px;accent-color:var(--accent)}
+.checks .do{font-weight:500}
+.checks .expect{color:var(--ink-2);font-size:14px}
+.checks li.done .do,.checks li.done .expect{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rule)}
+@media (max-width:620px){.checks li{grid-template-columns:24px 1fr}.checks .expect{grid-column:2}}
+.head-row{display:grid;grid-template-columns:24px minmax(0,1fr) minmax(0,1.1fr);gap:12px;padding:0 14px 4px;font-family:var(--f-display);font-stretch:87%;font-weight:650;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+@media (max-width:620px){.head-row{display:none}}
+.agenda{list-style:none;padding:0;margin:8px 0 18px;display:grid;gap:10px;max-width:none}
+.agenda li{display:grid;grid-template-columns:92px minmax(0,1fr);gap:14px;margin:0;padding:12px 14px;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
+.agenda .when{font-family:var(--f-mono);font-size:12px;color:var(--ink-3);padding-top:2px}
+.agenda .what{font-weight:600;margin-bottom:2px}
+.agenda .why{color:var(--ink-2);font-size:14px;margin:0}
+@media (max-width:520px){.agenda li{grid-template-columns:1fr;gap:4px}}
+footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-3)}
+@media (max-width:600px){body{font-size:15px}h2{font-size:23px}th,td{padding:8px 10px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="shell">
+<nav class="rail" aria-label="Steps">
+  <p>Runbook</p>
+  <ol>
+    <li><a href="#now"><b>·</b>Where things stand</a></li>
+    <li><a href="#names"><b>0</b>Pick the pilot names</a></li>
+    <li><a href="#address"><b>1</b>Permanent address</a></li>
+    <li><a href="#install"><b>2</b>Install ssv_channel</a></li>
+    <li><a href="#seed"><b>3</b>Set up ERPNext</a></li>
+    <li><a href="#tally"><b>4</b>Prepare TallyPrime</a></li>
+    <li><a href="#agent"><b>5</b>Run the agent</a></li>
+    <li><a href="#verify"><b>6</b>Check the data</a></li>
+    <li><a href="#accept"><b>7</b>Pilot acceptance tests</a></li>
+    <li><a href="#golive"><b>8</b>Going live</a></li>
+    <li class="sep" aria-hidden="true"></li>
+    <li><a href="#trouble"><b>?</b>Troubleshooting</a></li>
+    <li><a href="#security"><b>!</b>Security</a></li>
+    <li><a href="#agenda"><b>→</b>After the pilot</a></li>
+    <li><a href="#needs"><b>✓</b>What I need from you</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="top">
+  <p class="eyebrow">SSV platform · pilot runbook · ERPNext v15 ↔ ssv-agent ↔ TallyPrime</p>
+  <h1>From your ERPNext site to the first distributor data</h1>
+  <p class="lede">The exact steps, in order, to get one distributor's Tally sales and stock into your ERPNext for one manufacturer, then prove it is correct. Each step says where it happens.</p>
+  <div class="where">
+    <span>Where each step runs:</span>
+    <span class="chip bench">Bench terminal</span>
+    <span class="chip desk">ERPNext desk</span>
+    <span class="chip tally">TallyPrime</span>
+    <span class="chip pc">Distributor PC</span>
+  </div>
+</header>
+
+<section id="now">
+<h2>Where things stand</h2>
+<p class="sub">Updated 28 September 2026. Steps 1–7 below are done on the test site; repeat them for each real distributor.</p>
+
+<div class="status" role="table" aria-label="Current state">
+  <div class="row" role="row"><span class="k" role="cell">ERPNext site</span><span role="cell"><span class="pill ok">Live</span></span><span class="v" role="cell"><code>ssv-test.rajlaxmiworld.in</code> on a named Cloudflare tunnel (fixed address). Manufacturer CEAT, stock group <code>Ceat Tyre</code>, 3 test distributors. A production site waits for your hostname.</span></div>
+  <div class="row" role="row"><span class="k" role="cell">ssv_channel app</span><span role="cell"><span class="pill ok">0.6.4 installed</span></span><span class="v" role="cell">Every deck report (slides 14–33), plus:
+<ul><li>dashboard, alerts with a <i>Send Test Alert</i> button, Sync Health and monthly summary tables;</li><li>coverage line, mapping suggestions and unit conversion;</li><li>the retailer-contacts opt-out;</li><li>daily automatic reconciliation with each agent;</li><li>an optional hold on data until consent is recorded;</li><li><i>Delete Channel Data</i> for when a distributor's consent ends.</li></ul>Security-reviewed on 29 September. 46 tests pass on the site.</span></div>
+  <div class="row" role="row"><span class="k" role="cell">Agent</span><span role="cell"><span class="pill ok">0.5.3</span></span><span class="v" role="cell">Runs as a Windows service with automatic updates and rollback, installed for real on the test PC (29 September) and updated automatically three times, 0.5.0 → 0.5.3. Sends daily totals that the site reconciles: all three test distributors match. 51 tests pass.</span></div>
+  <div class="row" role="row"><span class="k" role="cell">SSV hub</span><span role="cell"><span class="pill ok">0.1.0 live</span></span><span class="v" role="cell">For distributors who sell for several manufacturers. Tested with real Tally data on 28 September: 1,833 bills, no other brand passed.</span></div>
+  <div class="row" role="row"><span class="k" role="cell">Proof</span><span role="cell"><span class="pill ok">Passed</span></span><span class="v" role="cell">MVP exit test: 200 of 200 figures equal Tally. 160,613 bills load test: every report under 2.5 s. Acceptance: 12 of 12 checks. The backup-restore check (29 September) found two agent bugs, both fixed in 0.5.2.</span></div>
+  <div class="row" role="row"><span class="k" role="cell">Real distributor</span><span role="cell"><span class="pill warn">Waiting</span></span><span class="v" role="cell">The next step: one real distributor with licensed TallyPrime. Get its signed consent first (see step 3).</span></div>
+</div>
+
+<h3>How the pieces connect</h3>
+<div class="dg"><pre class="mermaid">
+flowchart LR
+  T["TallyPrime<br/>distributor PC"] -->|"XML on localhost:9000"| A["ssv-agent.exe<br/>same PC"]
+  A -->|"HTTPS, signed batches"| E["ERPNext + ssv_channel<br/>your site"]
+  A -.->|"multi-brand distributor"| H["SSV hub<br/>one agent, many makers"]
+  H -.->|"only your lines"| E
+  E --> R["Reports: Secondary Sales,<br/>Distributor Stock, Sync Health"]
+  S["erpnext-setup.mjs<br/>admin API key"] -.->|"one-time setup"| E
+</pre></div>
+<p>The agent reads Tally on the distributor's own PC, keeps only the manufacturer's items, and sends signed batches to ERPNext. Nothing is written to your accounts or your own stock ledger; distributor data lives in the app's own record types.</p>
+</section>
+
+<section id="names">
+<h2><span class="n">0</span>Pick the pilot names</h2>
+<p class="sub">Decide once; everything below uses them. These are the defaults if you have no preference.</p>
+<div class="tw"><table>
+<thead><tr><th>Setting</th><th>Default</th><th>What it is</th></tr></thead>
+<tbody>
+<tr><td><b>Principal code</b></td><td><code>PATANJALI</code></td><td>The manufacturer this ERPNext site reports for. One site = one manufacturer.</td></tr>
+<tr><td><b>Principal name</b></td><td><code>Patanjali Ayurved</code></td><td>Becomes the Brand and the item group “Patanjali Ayurved Products”.</td></tr>
+<tr><td><b>Tally stock group</b></td><td><code>Patanjali</code></td><td>The group in the distributor's Tally that holds this manufacturer's items. Spelled exactly as in Tally. Sub-groups are included.</td></tr>
+<tr><td><b>Distributor ID</b></td><td><code>DIST-001</code></td><td>Your code for the distributor (the deck's “ShowroomCode”).</td></tr>
+<tr><td><b>Distributor name</b></td><td><code>Sharma Distributors</code></td><td>Also created as a Customer in group “Distributor”.</td></tr>
+<tr><td><b>Territory</b></td><td><code>West Zone › Maharashtra › Pune</code></td><td>Zone › state › city, for zone and state reports.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="address">
+<h2><span class="n">1</span>Give the site a permanent address</h2>
+<p class="sub"><span class="chip bench">Bench terminal</span> Every agent stores this address. If it changes, every distributor's agent stops delivering.</p>
+<p>Your API user is on <code>averlonworld.com</code>. If that domain's DNS is on Cloudflare, a <b>named</b> Cloudflare Tunnel gives a fixed address such as <code>erp.averlonworld.com</code>. It uses the same <code>cloudflared</code> you already run, and it needs no open ports or static IP.</p>
+<div class="code"><div class="cap"><span>bash · on the bench machine</span><button class="copy" type="button">Copy</button></div><pre><span class="c"># once: log in and create the tunnel</span>
+cloudflared tunnel login
+cloudflared tunnel create ssv-erp
+cloudflared tunnel route dns ssv-erp erp.averlonworld.com</pre></div>
+<div class="code"><div class="cap"><span>~/.cloudflared/config.yml</span><button class="copy" type="button">Copy</button></div><pre>tunnel: ssv-erp
+credentials-file: /home/&lt;user&gt;/.cloudflared/&lt;tunnel-id&gt;.json
+ingress:
+  - hostname: erp.averlonworld.com
+    service: http://localhost:8000
+  - service: http_status:404</pre></div>
+<div class="code"><div class="cap"><span>bash · run it as a service so it survives reboots</span><button class="copy" type="button">Copy</button></div><pre>sudo cloudflared --config ~/.cloudflared/config.yml service install
+sudo systemctl enable --now cloudflared</pre></div>
+<p>Use port <code>8000</code> for <code>bench start</code>, or <code>80</code> if the bench runs behind nginx in production mode. Frappe picks the site from the address. If this bench has more than one site, attach the new address to yours with <code>bench setup add-domain erp.averlonworld.com --site &lt;site&gt;</code>. With a single site it is served for any address.</p>
+<div class="note warn"><p class="t">If the domain is not on Cloudflare</p><p>Any address that survives a restart works: a reserved ngrok domain run as a service, or a small VPS with HTTPS. It must be HTTPS; the agent's batches are authenticated by signature, not by login.</p></div>
+</section>
+
+<section id="install">
+<h2><span class="n">2</span>Install the ssv_channel app</h2>
+<p class="sub"><span class="chip bench">Bench terminal</span> About five minutes. Copy <code>ssv_channel-0.6.4.zip</code> from <code>ssv-platform\erpnext-app</code> to the bench machine first.</p>
+<div class="code"><div class="cap"><span>bash · find your site name (the folder that has site_config.json)</span><button class="copy" type="button">Copy</button></div><pre>cd /home/frappe-user/frappe-bench
+ls sites</pre></div>
+<div class="code"><div class="cap"><span>bash · install (replace &lt;site&gt;)</span><button class="copy" type="button">Copy</button></div><pre>cd /home/frappe-user/frappe-bench
+unzip ~/ssv_channel-0.6.4.zip -d apps/
+./env/bin/pip install -e apps/ssv_channel
+grep -qx ssv_channel sites/apps.txt || echo ssv_channel &gt;&gt; sites/apps.txt
+bench --site &lt;site&gt; install-app ssv_channel
+bench restart            <span class="c"># production; with `bench start`, stop and start it again</span></pre></div>
+<div class="code"><div class="cap"><span>bash · already installed? upgrade instead (keeps the old copy)</span><button class="copy" type="button">Copy</button></div><pre>cd /home/frappe-user/frappe-bench
+mv apps/ssv_channel ~/ssv_channel-backup-$(date +%Y%m%d)
+unzip ~/ssv_channel-0.6.4.zip -d apps/
+bench --site &lt;site&gt; migrate
+bench restart</pre></div>
+<div class="code"><div class="cap"><span>bash · run the app's tests on the real Frappe</span><button class="copy" type="button">Copy</button></div><pre>bench --site &lt;site&gt; set-config allow_tests true
+bench --site &lt;site&gt; run-tests --app ssv_channel</pre></div>
+<p>Expect <code>Ran 46 tests … OK</code> (ingest, reports and report arithmetic). Send me the output of <code>install-app</code> and <code>run-tests</code> if anything fails.</p>
+<p>After a browser refresh the desk shows a new <b>SSV Channel</b> workspace with the three reports and the setup screens.</p>
+</section>
+
+<section id="seed">
+<h2><span class="n">3</span>Set up ERPNext for the pilot</h2>
+<p class="sub"><span class="chip desk">ERPNext desk</span> Either run the setup script (recommended) or do the same four things by hand.</p>
+
+<h3>Option A · setup script</h3>
+<p>From the <code>ssv-platform</code> folder on any PC with Node 18+. It uses your admin API key, creates only what is missing, and prints the distributor's agent settings at the end. Run the dry run first; it only reads.</p>
+<div class="code"><div class="cap"><span>PowerShell · ssv-platform folder</span><button class="copy" type="button">Copy</button></div><pre>$env:ERPNEXT_URL        = "https://erp.averlonworld.com"
+$env:ERPNEXT_API_KEY    = "&lt;api key&gt;"
+$env:ERPNEXT_API_SECRET = "&lt;api secret&gt;"
+node tools\erpnext-setup.mjs --dry-run
+node tools\erpnext-setup.mjs --principal-code PATANJALI --stock-group Patanjali</pre></div>
+<p>It creates the Brand, the item group, five sample manufacturer items (Dant Kanti 100g and others), the territory chain, a “Distributor” customer group and customer, <b>SSV Settings</b> and the <b>SSV Distributor</b> with its stock-group rule. Then it prints five lines like these:</p>
+<div class="code"><div class="cap"><span>printed by the script · keep it private</span><button class="copy" type="button">Copy</button></div><pre>MIDDLEWARE_URL=https://erp.averlonworld.com
+MIDDLEWARE_BATCHES_PATH=/api/method/ssv_channel.api.batches
+MIDDLEWARE_CONFIG_PATH=/api/method/ssv_channel.api.config
+DISTRIBUTOR_ID=DIST-001
+AGENT_SECRET=&lt;generated secret&gt;</pre></div>
+
+<h3>Option B · by hand</h3>
+<ol>
+<li><b>SSV Settings</b>: set Principal Code to <code>PATANJALI</code>.</li>
+<li><b>Items</b>: create the manufacturer's items. Give each an item name that matches the item name in the distributor's Tally, so it maps automatically.</li>
+<li><b>SSV Distributor</b> → New: Distributor ID <code>DIST-001</code>, name and territory. Under <i>Which Tally items belong to this principal</i>, add Stock Group = <code>Patanjali</code>. Save; a secret is generated.</li>
+<li>On that distributor: <b>Actions → Show Agent Secret</b>. Copy the five lines it shows.</li>
+</ol>
+<div class="note warn"><p class="t">Consent before the secret</p><p>For a real distributor, get the signed data-sharing consent first. Record its date in <b>Data Sharing Consent Date</b> on the SSV Distributor, then send the five lines. The consent template lists exactly what the agent sends.</p></div>
+</section>
+
+<section id="tally">
+<h2><span class="n">4</span>Prepare TallyPrime</h2>
+<p class="sub"><span class="chip tally">TallyPrime</span> On the PC that will play the distributor. Educational mode is fine for the pilot.</p>
+<div class="note warn"><p class="t">Educational mode limits dates</p><p>TallyPrime in Educational mode only accepts voucher dates on the 1st, 2nd and 31st of a month. Put the test vouchers on those days.</p></div>
+
+<h3>Turn on the XML server</h3>
+<p><kbd>F1</kbd> Help → Settings → Connectivity → Client/Server configuration: set <b>TallyPrime acts as</b> to <code>Both</code>, <b>Port</b> <code>9000</code>. Accept and restart TallyPrime. To check, open <code>http://localhost:9000</code> in a browser on that PC; it should say <i>TallyPrime Server is Running</i>.</p>
+
+<h3>Create a multi-brand distributor company</h3>
+<ol>
+<li><kbd>Alt</kbd>+<kbd>K</kbd> Company → Create: <code>Sharma Distributors</code>, state Maharashtra, GST on. <kbd>F11</kbd>: maintain inventory Yes.</li>
+<li>Stock groups: <code>Patanjali</code>, then <code>Patanjali Oral Care</code> under it, and <code>Colgate Palmolive</code>. The second brand is there to prove it never reaches your site.</li>
+<li>Stock items with opening stock:
+  <ul>
+  <li><code>Dant Kanti 100g</code> under Patanjali Oral Care, 500 Nos</li>
+  <li><code>Kesh Kanti Shampoo 200ml</code> under Patanjali, 200 Nos</li>
+  <li><code>Colgate Strong Teeth 200g</code> under Colgate Palmolive, 300 Nos</li>
+  </ul>
+  Names must match the ERPNext item names exactly for automatic mapping.</li>
+<li>Ledgers under Sundry Debtors: <code>Sharma Kirana Store</code> (with GSTIN) and <code>Gupta General Store</code>. A sales ledger <code>Sales GST 18%</code> under Sales Accounts.</li>
+<li>Vouchers:
+  <ul>
+  <li><kbd>F8</kbd> Sales to Sharma Kirana Store: 10 Dant Kanti <b>and</b> 5 Colgate on one bill.</li>
+  <li><kbd>F8</kbd> Sales to Gupta General Store: 4 Kesh Kanti.</li>
+  <li><kbd>Alt</kbd>+<kbd>F6</kbd> Credit Note from Sharma Kirana Store: 2 Dant Kanti returned.</li>
+  </ul></li>
+</ol>
+<p>Keep Tally's Stock Summary and Sales Register open; step 6 compares against them.</p>
+</section>
+
+<section id="agent">
+<h2><span class="n">5</span>Run the agent</h2>
+<p class="sub"><span class="chip pc">Distributor PC</span> The same PC as TallyPrime. No Node or other install needed.</p>
+<ol>
+<li>Unzip <code>ssv-agent-0.5.3-win-x64.zip</code> into a folder, e.g. <code>C:\SSVAgent</code>.</li>
+<li>Copy <code>.env.example</code> to <code>.env</code> in that folder and fill it in:</li>
+</ol>
+<div class="code"><div class="cap"><span>C:\SSVAgent\.env</span><button class="copy" type="button">Copy</button></div><pre><span class="c"># the five lines from step 3</span>
+MIDDLEWARE_URL=https://erp.averlonworld.com
+MIDDLEWARE_BATCHES_PATH=/api/method/ssv_channel.api.batches
+MIDDLEWARE_CONFIG_PATH=/api/method/ssv_channel.api.config
+DISTRIBUTOR_ID=DIST-001
+AGENT_SECRET=&lt;from step 3&gt;
+
+TALLY_URL=http://localhost:9000
+SYNC_INTERVAL_MINUTES=5
+<span class="c"># optional: only read Tally from this date on the first sync</span>
+<span class="c"># SYNC_FROM=2026-04-01</span>
+<span class="c"># while testing deletions, check every 5 minutes instead of 60</span>
+DELETED_CHECK_INTERVAL_MINUTES=5
+<span class="c"># any long random string; enables the local status API on 127.0.0.1:4100</span>
+LOCAL_API_TOKEN=&lt;random string&gt;</pre></div>
+<div class="code"><div class="cap"><span>PowerShell · C:\SSVAgent</span><button class="copy" type="button">Copy</button></div><pre>.\ssv-agent.exe --once     <span class="c"># one sync, prints a report, exits</span>
+.\ssv-agent.exe            <span class="c"># keeps running in this window (testing)</span></pre></div>
+<p>Windows may warn <i>Windows protected your PC</i> because the exe is not yet code-signed: More info → Run anyway.</p>
+<p>For everyday running, double-click <code>install.cmd</code> in the same folder and accept the Windows prompt. It installs the <b>SSV Tally Connector</b> service: it starts with Windows, restarts itself, keeps the settings in <code>C:\ProgramData\SSVConnector</code> (administrators only) and logs to <code>C:\ProgramData\SSVConnector\logs\agent.log</code>. Close any <code>ssv-agent.exe</code> window first; <code>uninstall.cmd</code> removes it.</p>
+<h3>Reading the <code>--once</code> report</h3>
+<div class="tw"><table>
+<thead><tr><th>Field</th><th>Good value</th></tr></thead>
+<tbody>
+<tr><td><code>rulesSource</code></td><td><code>middleware</code>: the agent fetched the stock-group rule from ERPNext.</td></tr>
+<tr><td><code>firstSyncCompleted</code>, <code>daysRead</code></td><td><code>true</code> on the first run, with one day read per day since the company's start (or <code>SYNC_FROM</code>).</td></tr>
+<tr><td><code>upload.vouchers</code>, <code>upload.items</code></td><td>Above zero; <code>rejected</code> 0 and no <code>error</code>.</td></tr>
+<tr><td><code>warnings</code></td><td>Empty. An item matching two manufacturers' groups is listed here.</td></tr>
+</tbody></table></div>
+<p>Run from a window, the agent keeps its data and logs in <code>%APPDATA%\SSVConnector</code>, and closing the window stops it. As the service it uses <code>C:\ProgramData\SSVConnector</code> and runs without anyone logged in.</p>
+
+<h3>A distributor who sells for several manufacturers</h3>
+<p>One agent serves all of them through the SSV hub. The hub gives each manufacturer only its own lines. Only the agent's address changes.</p>
+<ol>
+<li><span class="chip bench">Bench terminal</span> Register the distributor on the hub. This writes <code>RL-001.agent.env</code> with the distributor's hub secret:
+<div class="code"><div class="cap"><span>bash · in ~/ssv-hub on the server</span><button class="copy" type="button">Copy</button></div><pre>cd ~/ssv-hub
+HUB_PUBLIC_URL=https://ssv-test.rajlaxmiworld.in node src/admin.js add-distributor RL-001 "Rajlaxmi Solutions"</pre></div></li>
+<li>For each manufacturer: on that manufacturer's site, create the SSV Distributor as in step 3, then link it on the hub with the secret from its <b>Show Agent Secret</b>. <code>read -rs</code> asks for the secret without showing it or saving it in the shell history:
+<div class="code"><div class="cap"><span>bash · repeat per manufacturer</span><button class="copy" type="button">Copy</button></div><pre>read -rs -p "Agent secret from that site: " HUB_LINK_SECRET; export HUB_LINK_SECRET
+node src/admin.js link RL-001 CEAT https://ssv-test.rajlaxmiworld.in DIST-001
+unset HUB_LINK_SECRET
+node src/admin.js list</pre></div></li>
+<li><span class="chip pc">Distributor PC</span> Put the lines from <code>RL-001.agent.env</code> into the agent's <code>.env</code> in place of the five lines from step 3. The paths are <code>/agent/v1/batches</code> and <code>/agent/v1/config</code> on the same address.</li>
+</ol>
+<p>Each manufacturer still sets <b>Sync Every</b> and <b>Sync Now</b> on its own site. The agent follows the shortest interval, and a Sync Now from any site starts a run.</p>
+</section>
+
+<section id="verify">
+<h2><span class="n">6</span>Check the data in ERPNext</h2>
+<p class="sub"><span class="chip desk">ERPNext desk</span> Open the SSV Channel workspace.</p>
+<ol>
+<li><b>SSV Sync Health</b>: DIST-001 shows <span class="pill ok">OK</span> with batches and records for today, and <i>Reconciled</i> OK after the first run. From then on, the agent's totals are checked every day; a difference shows as <i>Mismatch</i> and in the daily alert.</li>
+<li><b>SSV Channel Item</b>: Dant Kanti 100g and Kesh Kanti Shampoo 200ml are <i>Mapped</i> to your items. There is no Colgate item at all, because it never left the distributor's PC. Map anything <i>Unmapped</i> by setting its Item.</li>
+<li><b>SSV Secondary Sales</b> for this month, grouped by Distributor and Item. Dant Kanti: sales 10, returns 2, net 8. Kesh Kanti: net 4. Outlets billed: 2.</li>
+<li><b>SSV Distributor Stock</b>, as of today: Dant Kanti 492 (500 − 10 + 2), Kesh Kanti 196. Both should equal Tally's Stock Summary.</li>
+<li>Open one <b>SSV Secondary Voucher</b>: the mixed bill shows only its Dant Kanti line, with the retailer linked.</li>
+</ol>
+</section>
+
+<section id="accept">
+<h2><span class="n">7</span>Pilot acceptance tests</h2>
+<p class="sub"><span class="chip tally">TallyPrime</span><span class="chip desk">ERPNext desk</span> Do each in Tally, wait one sync (5 min) or run <code>--once</code>, then check. Ticks are saved in this browser only.</p>
+<div class="head-row" aria-hidden="true"><span></span><span>Do this in Tally</span><span>Expect in ERPNext</span></div>
+<ul class="checks" id="checks">
+<li><input type="checkbox" id="t1" aria-labelledby="t1d"><span class="do" id="t1d">Mixed-brand bill (already done in step 4)</span><span class="expect">Only the Patanjali line arrives; no Colgate item, voucher line or stock anywhere.</span></li>
+<li><input type="checkbox" id="t2" aria-labelledby="t2d"><span class="do" id="t2d">Edit an old bill: change 10 to 7</span><span class="expect">Same Secondary Voucher updated to 7 (higher Tally Alter ID); net sales drops by 3.</span></li>
+<li><input type="checkbox" id="t3" aria-labelledby="t3d"><span class="do" id="t3d">Delete a bill</span><span class="expect">At the next deleted-voucher check the voucher is marked Deleted and drops out of Secondary Sales.</span></li>
+<li><input type="checkbox" id="t4" aria-labelledby="t4d"><span class="do" id="t4d">Remove all Patanjali lines from a bill, keep the Colgate line</span><span class="expect">The voucher is withdrawn (Deleted) for Patanjali.</span></li>
+<li><input type="checkbox" id="t5" aria-labelledby="t5d"><span class="do" id="t5d">Sell more Kesh Kanti than is in stock</span><span class="expect">Distributor Stock shows the negative closing in red. Accepted, not rejected.</span></li>
+<li><input type="checkbox" id="t6" aria-labelledby="t6d"><span class="do" id="t6d">Create a new Patanjali item in Tally with a name not in ERPNext, and sell it</span><span class="expect">Appears as an Unmapped Channel Item; after you set its Item, reports show it under your code, past sales included.</span></li>
+<li><input type="checkbox" id="t7" aria-labelledby="t7d"><span class="do" id="t7d">Close TallyPrime, let a sync run, reopen it</span><span class="expect">Within one sync, the SSV Distributor shows <i>Last Run Status: Failed</i> with “TallyPrime is not reachable”, and SSV Sync Health says <i>Failing</i>. After reopening, the next run is OK and it catches up with nothing lost.</span></li>
+<li><input type="checkbox" id="t8" aria-labelledby="t8d"><span class="do" id="t8d">Stop the tunnel (or ERPNext), make a sale, start it again</span><span class="expect">Agent shows an upload error and keeps the rows; they arrive on the next sync after ERPNext is back.</span></li>
+<li><input type="checkbox" id="t9" aria-labelledby="t9d"><span class="do" id="t9d">Take a Tally backup, add two bills, restore the backup, add one bill</span><span class="expect">Agent log says it stepped back after a restore; the two lost bills are withdrawn and the new one arrives.</span></li>
+<li><input type="checkbox" id="t11" aria-labelledby="t11d"><span class="do" id="t11d">Create a second godown and move part of an item's stock into it with a Stock Journal</span><span class="expect">SSV Distributor Stock with <i>Godown-wise</i> ticked shows the item split across the two godowns; the total is unchanged and there is no <i>Unallocated</i> row.</span></li>
+<li><input type="checkbox" id="t12" aria-labelledby="t12d"><span class="do" id="t12d">On the SSV Distributor, set <i>Sync Every</i> to 15 and press <b>Sync Now</b> (agent running, not <code>--once</code>)</span><span class="expect">Within about 2 minutes the agent log says “Sync interval set in ERPNext: every 15 min” and “Sync requested from ERPNext”; the form’s Last Run moves past Sync Requested At.</span></li>
+<li><input type="checkbox" id="t10" aria-labelledby="t10d"><span class="do" id="t10d">Month-end reconciliation</span><span class="expect">Secondary Sales net qty and value per item equal Tally's Sales Register minus Credit Notes, to the rupee. This is the MVP exit test.</span></li>
+</ul>
+</section>
+
+<section id="golive">
+<h2><span class="n">8</span>Going live on a production site</h2>
+<p class="sub">On hold until you give the hostname. Everything else is ready; this is the whole list, in order.</p>
+<h3>You, about 15 minutes</h3>
+<ol>
+<li>Pick the hostname, e.g. <code>ceat.rajlaxmiworld.in</code>. The domain is already on the Cloudflare account the tunnel uses.</li>
+<li><span class="chip bench">Bench terminal</span> Create the site. It asks for the database root password and sets the Administrator password; both stay with you:
+<div class="code"><div class="cap"><span>bash · on the server</span><button class="copy" type="button">Copy</button></div><pre>cd ~/frappe-bench
+bench new-site ceat.rajlaxmiworld.in</pre></div></li>
+<li>Tell me "site created".</li>
+</ol>
+<h3>Me, about half a day</h3>
+<ol>
+<li><b>Apps:</b> install ERPNext, India Compliance and ssv_channel on the new site, then migrate and run the tests.</li>
+<li><b>Data:</b> restore the test site's latest backup into it, so the pilot's history and your items, classifications and territories come along. Then remove the three test distributors (DIST-001–003) with <i>Delete Channel Data</i>.</li>
+<li><b>Address:</b> add a tunnel route and DNS for the hostname, and send its <code>/agent/v1/</code> path to the hub.</li>
+<li><b>Settings:</b>
+  <ul>
+  <li>SSV Settings: <i>Hold Data Until Consent Is Recorded</i> on, the alert recipients, and the approved agent version with a download link on the new address.</li>
+  <li>Team users with the Sales Manager or Sales User role.</li>
+  </ul></li>
+<li><b>Backups:</b> daily site backups, plus a copy off the server. That needs a destination from you: another server, Google Drive or S3.</li>
+<li><b>Agents:</b> change <code>MIDDLEWARE_URL</code> on each pilot PC, or the hub link, to the new address. The secrets travel with the restored data, so nothing else changes and nothing is re-sent.</li>
+<li><b>Proof:</b> every distributor shows <i>OK</i> and <i>Reconciled OK</i> in Sync Health, and <i>Send Test Alert</i> reaches your inbox.</li>
+</ol>
+<p>The test site stays as it is, for trying out changes and for training.</p>
+</section>
+
+<section id="trouble">
+<h2>Troubleshooting</h2>
+<p class="sub">What the agent or ERPNext says, what it means, what to do.</p>
+<div class="tw"><table>
+<thead><tr><th>You see</th><th>Cause</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td><code>TallyPrime is not reachable on http://localhost:9000</code></td><td>Tally closed, or the XML server is off</td><td>Open TallyPrime with the company loaded; redo the Connectivity setting in step 4.</td></tr>
+<tr><td><code>upload.error: HTTP 401</code></td><td>Signature refused: wrong secret or ID, or the PC clock is more than 5 minutes off</td><td>Re-copy the five lines from Show Agent Secret; set Windows time to automatic.</td></tr>
+<tr><td><code>HTTP 503</code></td><td>SSV Settings has no principal code</td><td>Set it; the agent retries by itself.</td></tr>
+<tr><td><code>rejected</code> above 0</td><td>ERPNext refused a batch, e.g. for another manufacturer</td><td>SSV Ingest Log → status Refused shows the reason.</td></tr>
+<tr><td><code>upload.skipped: first sync in progress</code></td><td>The first sync has not finished all days yet</td><td>Wait or run <code>--once</code> again; it resumes where it stopped. Use <code>SYNC_FROM</code> to start later.</td></tr>
+<tr><td><code>rulesSource: none</code> and nothing uploaded</td><td>The agent could not reach ERPNext on its first run</td><td>Check <code>MIDDLEWARE_URL</code> opens in a browser on that PC.</td></tr>
+<tr><td>Everything stopped after a restart</td><td>The site address changed (quick tunnel)</td><td>Do step 1; then update <code>MIDDLEWARE_URL</code> once.</td></tr>
+<tr><td>Items stay Unmapped</td><td>Tally item name ≠ ERPNext item code or name</td><td>Set the Item on the Channel Item, or rename to match.</td></tr>
+<tr><td>Company blocked: “Repair (rewrite) the company data”</td><td>Tally's change counter is invalid</td><td>In TallyPrime, repair the company data, then sync again.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="security">
+<h2>Security</h2>
+<div class="note crit">
+<p class="t">Do these before any real distributor is connected</p>
+<ul>
+<li><b>Administrator password:</b> changed by you on 28 September. Keep it private.</li>
+<li><b>Regenerate the admin API secret</b> after setup (User → API Access → Generate Keys). It was shared in chat, and it can do anything the user can. Agents never use it.</li>
+<li>Each distributor has its own agent secret. Disable a distributor, or rotate its secret with <code>--rotate-secret</code>, to cut it off.</li>
+<li>Keep the site on HTTPS only. The agent's endpoints accept requests without login, authenticated by signature alone.</li>
+</ul>
+</div>
+</section>
+
+<section id="agenda">
+<h2>After the pilot</h2>
+<p class="sub">In order. None of these block the steps above.</p>
+<ol class="agenda">
+<li><span class="when">done</span><div><p class="what">Test data at volume</p><p class="why"><code>tools/tally-volume.mjs</code> fills an empty Tally company with 18 months of mixed-brand books; the ERPNext load test put 160,613 vouchers from 50 distributors through ingest. Every report stays under 2.5 s.</p></div></li>
+<li><span class="when">done</span><div><p class="what">Agent as a Windows service</p><p class="why"><code>install.cmd</code> in the package. Code-signing (no SmartScreen warning) waits for a certificate.</p></div></li>
+<li><span class="when">done</span><div><p class="what">Summary tables for volume</p><p class="why">SSV Monthly Summary, kept by ingest; results identical to the voucher lines.</p></div></li>
+<li><span class="when">later</span><div><p class="what">SMS or WhatsApp alerts</p><p class="why">E-mail alerts for stale sync and negative stock are built; add SMS or WhatsApp once a provider is chosen.</p></div></li>
+<li><span class="when">done</span><div><p class="what">SSV hub (middleware)</p><p class="why">One agent per distributor, many manufacturers, each receiving only its own lines. Live on the test server; see step 5.</p></div></li>
+<li><span class="when">done</span><div><p class="what">Rollout helpers</p><p class="why">Agent auto-update with rollback, mapping suggestions, cases-vs-pieces conversion, and the dashboard's "up to date from X of Y distributors" line.</p></div></li>
+<li><span class="when">Phase 2</span><div><p class="what">Two-way</p><p class="why">Push manufacturer items and prices into Tally, principal invoice → distributor purchase voucher, outstanding and payment reconciliation.</p></div></li>
+</ol>
+</section>
+
+<section id="needs">
+<h2>What I need from you</h2>
+<ol>
+<li>The permanent site address from step 1, or which option you prefer if the domain is not on Cloudflare.</li>
+<li>The output of <code>install-app</code> and <code>run-tests</code> from step 2.</li>
+<li>The pilot names from step 0, if not the defaults.</li>
+<li>The <code>--once</code> report from step 5 and any row of step 7 that does not match.</li>
+</ol>
+</section>
+
+<footer>Paths are relative to the <code>ssv-platform</code> folder: the app zip in <code>erpnext-app\</code>, the agent zip in <code>agent\dist\</code>, the setup script in <code>tools\</code>. Site facts were read over the API on 24 September 2026.</footer>
+</main>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll(".code").forEach(function(box){
+    var btn = box.querySelector(".copy"), pre = box.querySelector("pre");
+    if (!btn || !pre) return;
+    btn.addEventListener("click", function(){
+      var text = pre.innerText;
+      var done = function(){ btn.textContent = "Copied"; setTimeout(function(){ btn.textContent = "Copy"; }, 1500); };
+      var fallback = function(){
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = "Selected — press Ctrl+C";
+        setTimeout(function(){ btn.textContent = "Copy"; }, 2500);
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+        else fallback();
+      } catch (e) { fallback(); }
+    });
+  });
+
+  var KEY = "ssv-runbook-checks";
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  document.querySelectorAll("#checks input[type=checkbox]").forEach(function(cb){
+    var li = cb.closest("li");
+    if (saved[cb.id]) { cb.checked = true; li.classList.add("done"); }
+    cb.addEventListener("change", function(){
+      li.classList.toggle("done", cb.checked);
+      saved[cb.id] = cb.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    });
+  });
+})();
+</script>

@@ -1,0 +1,29 @@
+# Secrets and per-install config — never commit
+.env
+.env.*
+!.env.example
+site_config.json
+common_site_config.json
+
+# Build output and packages
+node_modules/
+agent/build/
+agent/dist/
+agent/release-*/
+agent/pilot/
+# Hub registry and generated agent settings hold secrets
+middleware/data/
+*.agent.env
+erpnext-app/*.zip
+# Expected-figures files written by tools/tally-volume.mjs
+tally-volume-*.json
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Local agent state (SQLite staging, logs, probe output)
+*.db
+*.db-wal
+*.db-shm
+*.log
+probe-report-*.json

@@ -1,0 +1,131 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-09-24 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "distributor",
+  "tally_company_name",
+  "tally_company_guid",
+  "cb1",
+  "sync_epoch",
+  "last_batch_at",
+  "reconcile_section",
+  "reconcile_status",
+  "reconciled_at",
+  "reconcile_problem"
+ ],
+ "fields": [
+  {
+   "fieldname": "distributor",
+   "fieldtype": "Link",
+   "label": "Distributor",
+   "options": "SSV Distributor",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "tally_company_name",
+   "fieldtype": "Data",
+   "label": "Tally Company Name",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tally_company_guid",
+   "fieldtype": "Data",
+   "label": "Tally Company GUID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sync_epoch",
+   "fieldtype": "Int",
+   "label": "Sync Epoch",
+   "read_only": 1,
+   "description": "Rises each time the agent detects a restored Tally backup"
+  },
+  {
+   "fieldname": "last_batch_at",
+   "fieldtype": "Datetime",
+   "label": "Last Batch At",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reconcile_section",
+   "fieldtype": "Section Break",
+   "label": "Reconciliation with the agent"
+  },
+  {
+   "fieldname": "reconcile_status",
+   "fieldtype": "Select",
+   "label": "Reconciled",
+   "options": "\nOK\nMismatch",
+   "read_only": 1,
+   "in_list_view": 1,
+   "description": "Once a day (agent 0.5.3+) the agent sends bills, quantity and value per month for what it delivered here; this site compares them with what it holds."
+  },
+  {
+   "fieldname": "reconciled_at",
+   "fieldtype": "Datetime",
+   "label": "Reconciled At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reconcile_problem",
+   "fieldtype": "Small Text",
+   "label": "Differences",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "links": [],
+ "modified": "2026-09-29 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SSV Channel",
+ "name": "SSV Tally Company",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Sales Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "Sales User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "hash",
+ "title_field": "tally_company_name",
+ "naming_rule": "Random"
+}

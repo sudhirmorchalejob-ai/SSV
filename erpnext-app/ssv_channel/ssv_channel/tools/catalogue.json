@@ -1,0 +1,36 @@
+{
+  "_comment": "Test catalogue shared by tools/tally-volume.mjs (Tally side) and ssv_channel.tools.load_test (ERPNext side). CEAT is the principal on the test site; JK and MRF must never reach it. in_erpnext=false: sold in Tally but no ERPNext Item, so it must arrive as an Unmapped Channel Item.",
+  "principal_group": "Ceat Tyre",
+  "groups": [
+    ["Ceat Tyre", ""],
+    ["Ceat Car Tyre", "Ceat Tyre"],
+    ["Ceat Truck Tyre", "Ceat Tyre"],
+    ["Ceat Farm Tyre", "Ceat Tyre"],
+    ["Ceat 2W Tyre", "Ceat Tyre"],
+    ["JK Tyre", ""],
+    ["MRF Tyres", ""]
+  ],
+  "items": [
+    {"tally_name": "CEAT – Milaze – 145/80 R12 – Car Tyre", "item_code": "CEAT-MILAZE-145-80-R12", "group": "Ceat Car Tyre", "brand": "CEAT", "product_line": "Milaze", "category": "Car Tyre", "sub_category": "Passenger Radial", "size": "145/80 R12", "size_group": "12-13 inch", "size_sort": 12, "product_class": "Mass", "buy": 3400, "sell": 4000, "in_erpnext": true, "weight": 9},
+    {"tally_name": "CEAT – Milaze X3 – 155/80 R13 – Car Tyre", "item_code": "CEAT-MILAZE-X3-155-80-R13", "group": "Ceat Car Tyre", "brand": "CEAT", "product_line": "Milaze", "category": "Car Tyre", "sub_category": "Passenger Radial", "size": "155/80 R13", "size_group": "12-13 inch", "size_sort": 13, "product_class": "Mass", "buy": 3700, "sell": 4350, "in_erpnext": true, "weight": 8},
+    {"tally_name": "CEAT – SecuraDrive – 185/65 R15 – Car Tyre", "item_code": "CEAT-SECURADRIVE-185-65-R15", "group": "Ceat Car Tyre", "brand": "CEAT", "product_line": "SecuraDrive", "category": "Car Tyre", "sub_category": "Passenger Radial", "size": "185/65 R15", "size_group": "14-15 inch", "size_sort": 15, "product_class": "Premium", "buy": 3850, "sell": 4500, "in_erpnext": true, "weight": 7},
+    {"tally_name": "CEAT – Zoom – 205/55 R16 – Car Tyre", "item_code": "CEAT-ZOOM-205-55-R16", "group": "Ceat Car Tyre", "brand": "CEAT", "product_line": "Zoom", "category": "Car Tyre", "sub_category": "Passenger Radial", "size": "205/55 R16", "size_group": "16-17 inch", "size_sort": 16, "product_class": "Premium", "buy": 3400, "sell": 4000, "in_erpnext": true, "weight": 5},
+    {"tally_name": "CEAT – SportDrive – 215/55 R17 – Car Tyre", "item_code": "CEAT-SPORTDRIVE-215-55-R17", "group": "Ceat Car Tyre", "brand": "CEAT", "product_line": "SportDrive", "category": "Car Tyre", "sub_category": "Passenger Radial", "size": "215/55 R17", "size_group": "16-17 inch", "size_sort": 17, "product_class": "Premium", "buy": 3400, "sell": 4000, "in_erpnext": true, "weight": 4},
+    {"tally_name": "CEAT – Czar – 235/65 R17 – SUV Tyre", "item_code": "CEAT-CZAR-235-65-R17", "group": "Ceat Car Tyre", "brand": "CEAT", "product_line": "Czar", "category": "SUV Tyre", "sub_category": "SUV Radial", "size": "235/65 R17", "size_group": "16-17 inch", "size_sort": 17, "product_class": "Premium", "buy": 7900, "sell": 9200, "in_erpnext": true, "weight": 3},
+    {"tally_name": "CEAT – Energy Drive – 175/65 R14 – Car Tyre", "item_code": "", "group": "Ceat Car Tyre", "brand": "CEAT", "product_line": "Energy Drive", "category": "Car Tyre", "sub_category": "Passenger Radial", "size": "175/65 R14", "size_group": "14-15 inch", "size_sort": 14, "product_class": "Economy", "buy": 3100, "sell": 3650, "in_erpnext": false, "weight": 3},
+    {"tally_name": "CEAT – Winmile – 10.00 R20 – Truck Tyre", "item_code": "CEAT-WINMILE-10-00-R20", "group": "Ceat Truck Tyre", "brand": "CEAT", "product_line": "Winmile", "category": "Truck Tyre", "sub_category": "Truck Radial", "size": "10.00 R20", "size_group": "18-20 inch", "size_sort": 20, "product_class": "Premium", "buy": 17800, "sell": 20500, "in_erpnext": true, "weight": 2},
+    {"tally_name": "CEAT – Buland – 9.00-20 – Truck Tyre", "item_code": "CEAT-BULAND-9-00-20", "group": "Ceat Truck Tyre", "brand": "CEAT", "product_line": "Buland", "category": "Truck Tyre", "sub_category": "Truck Bias", "size": "9.00-20", "size_group": "18-20 inch", "size_sort": 20, "product_class": "Mass", "buy": 14200, "sell": 16300, "in_erpnext": true, "weight": 2},
+    {"tally_name": "CEAT – Farmax – Tractor Tyre", "item_code": "CEAT-FARMAX", "group": "Ceat Farm Tyre", "brand": "CEAT", "product_line": "Farmax", "category": "Tractor Tyre", "sub_category": "Farm Rear", "size": "13.6-28", "size_group": "Farm", "size_sort": 28, "product_class": "Mass", "buy": 6400, "sell": 7500, "in_erpnext": true, "weight": 3},
+    {"tally_name": "CEAT – Zoom Plus – 90/90-12 – Scooter Tyre", "item_code": "CEAT-ZOOM-PLUS-90-90-12", "group": "Ceat 2W Tyre", "brand": "CEAT", "product_line": "Zoom Plus", "category": "Two Wheeler Tyre", "sub_category": "Scooter", "size": "90/90-12", "size_group": "12-13 inch", "size_sort": 12, "product_class": "Mass", "buy": 1150, "sell": 1400, "in_erpnext": true, "weight": 10},
+    {"tally_name": "CEAT – Gripp – 2.75-18 – Bike Tyre", "item_code": "CEAT-GRIPP-2-75-18", "group": "Ceat 2W Tyre", "brand": "CEAT", "product_line": "Gripp", "category": "Two Wheeler Tyre", "sub_category": "Motorcycle", "size": "2.75-18", "size_group": "18-20 inch", "size_sort": 18, "product_class": "Economy", "buy": 980, "sell": 1200, "in_erpnext": true, "weight": 10}
+  ],
+  "other_items": [
+    {"tally_name": "JK 145/80 R12 Taximax Tubeless (Car tyre)", "group": "JK Tyre", "buy": 3200, "sell": 3800, "weight": 6},
+    {"tally_name": "JK 165/70 R14 Ultima Neo TL (Car tyre)", "group": "JK Tyre", "buy": 3500, "sell": 4150, "weight": 5},
+    {"tally_name": "JK 10.00 R20 JETSTEEL JDH5 (Radial Truck tyre)", "group": "JK Tyre", "buy": 17000, "sell": 19800, "weight": 2},
+    {"tally_name": "JK 2.75-18 Challenger F21 TT (Bike tyre - Tube Type)", "group": "JK Tyre", "buy": 900, "sell": 1100, "weight": 8},
+    {"tally_name": "MRF ZVTS 145/80 R12 (Car tyre)", "group": "MRF Tyres", "buy": 3500, "sell": 4100, "weight": 6},
+    {"tally_name": "MRF Wanderer 215/60 R16 (SUV tyre)", "group": "MRF Tyres", "buy": 6900, "sell": 8000, "weight": 3},
+    {"tally_name": "MRF Nylogrip 2.75-18 (Bike tyre)", "group": "MRF Tyres", "buy": 950, "sell": 1150, "weight": 8}
+  ]
+}

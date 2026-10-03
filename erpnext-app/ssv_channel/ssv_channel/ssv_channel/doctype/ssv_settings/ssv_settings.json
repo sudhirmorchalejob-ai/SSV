@@ -1,0 +1,162 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-09-24 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "principal_code",
+  "principal_name",
+  "clock_skew_seconds",
+  "hold_until_consent",
+  "wording_section",
+  "partner_label",
+  "buyer_label",
+  "alerts_section",
+  "alert_emails",
+  "stale_after_hours",
+  "alert_negative_stock",
+  "margin_section",
+  "show_margin",
+  "agent_update_section",
+  "agent_version",
+  "agent_download_url",
+  "agent_sha256"
+ ],
+ "fields": [
+  {
+   "fieldname": "principal_code",
+   "fieldtype": "Data",
+   "label": "Principal Code",
+   "reqd": 1,
+   "description": "Must match the principal code in the distributors' rules; batches for any other principal are refused."
+  },
+  {
+   "fieldname": "principal_name",
+   "fieldtype": "Data",
+   "label": "Principal Name"
+  },
+  {
+   "fieldname": "clock_skew_seconds",
+   "fieldtype": "Int",
+   "label": "Allowed Clock Skew (seconds)",
+   "default": "300",
+   "description": "Signed requests older or newer than this are refused (replay protection)."
+  },
+  {
+   "fieldname": "hold_until_consent",
+   "fieldtype": "Check",
+   "label": "Hold Data Until Consent Is Recorded",
+   "default": "0",
+   "description": "Data from a distributor without a Data Sharing Consent Date is not accepted yet. Its agent keeps it and retries, so nothing is lost once the date is entered."
+  },
+  {
+   "fieldname": "wording_section",
+   "fieldtype": "Section Break",
+   "label": "Wording",
+   "collapsible": 1,
+   "description": "A distributor's own site receives data from its dealers: set Dealer and Customer here and press Apply Wording. Every screen and report of this app then uses those words."
+  },
+  {
+   "fieldname": "partner_label",
+   "fieldtype": "Data",
+   "label": "Those Who Send Data",
+   "default": "Distributor",
+   "description": "Distributor on a manufacturer's site; Dealer on a distributor's site"
+  },
+  {
+   "fieldname": "buyer_label",
+   "fieldtype": "Data",
+   "label": "Their Buyers",
+   "default": "Retailer",
+   "description": "Retailer on a manufacturer's site; Customer on a distributor's site"
+  },
+  {
+   "fieldname": "alerts_section",
+   "fieldtype": "Section Break",
+   "label": "Daily alerts"
+  },
+  {
+   "fieldname": "alert_emails",
+   "fieldtype": "Small Text",
+   "label": "Send Alerts To",
+   "description": "E-mail addresses, one per line or comma-separated. Empty = no alert e-mails."
+  },
+  {
+   "fieldname": "stale_after_hours",
+   "fieldtype": "Int",
+   "label": "Distributor Is Stale After (hours)",
+   "default": "24"
+  },
+  {
+   "fieldname": "alert_negative_stock",
+   "fieldtype": "Check",
+   "label": "Alert On Negative Stock",
+   "default": "1"
+  },
+  {
+   "fieldname": "margin_section",
+   "fieldtype": "Section Break",
+   "label": "Retailer margin"
+  },
+  {
+   "fieldname": "show_margin",
+   "fieldtype": "Check",
+   "label": "Show Cost And Margin In Reports",
+   "default": "0",
+   "description": "Cost is estimated from the distributor's stock valuation already synced. Shown only for distributors who consented (SSV Distributor → Shares Cost Price)."
+  },
+  {
+   "fieldname": "agent_update_section",
+   "fieldtype": "Section Break",
+   "label": "Agent updates",
+   "description": "Agents running as the Windows service install this version by themselves, checking the checksum first, and go back to the previous version if the new one keeps failing."
+  },
+  {
+   "fieldname": "agent_version",
+   "fieldtype": "Data",
+   "label": "Approved Agent Version",
+   "description": "e.g. 0.4.2. Agents older than this update; leave empty to stop updates."
+  },
+  {
+   "fieldname": "agent_download_url",
+   "fieldtype": "Data",
+   "label": "Agent Download URL",
+   "options": "URL",
+   "description": "HTTPS address of ssv-agent.exe for that version, e.g. a file attached here with Is Private unticked."
+  },
+  {
+   "fieldname": "agent_sha256",
+   "fieldtype": "Data",
+   "label": "Agent SHA-256",
+   "description": "Checksum of that ssv-agent.exe (PowerShell: Get-FileHash ssv-agent.exe). An agent refuses a download that does not match."
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-09-29 15:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SSV Channel",
+ "name": "SSV Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

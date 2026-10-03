@@ -1,0 +1,353 @@
+<title>SSV Channel Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root {
+  --ink: #1c2024;
+  --ink-soft: #4a5057;
+  --paper: #f4f5f1;
+  --surface: #ffffff;
+  --rule: #d6d9d0;
+  --amber: #b7791f;
+  --amber-bg: #fbf3e4;
+  --teal: #0e6b6b;
+  --teal-bg: #e6f2f1;
+  --ok: #2f7d3a; --ok-bg: #e7f3e8;
+  --warn: #9a6400; --warn-bg: #fdf1dc;
+  --bad: #b3261e; --bad-bg: #fbe9e7;
+  --code-bg: #eceee8;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ink: #e7e9e4; --ink-soft: #a9afa6; --paper: #15181b; --surface: #1d2125; --rule: #333a40;
+    --amber: #e0a547; --amber-bg: #2c2415; --teal: #5cc3c0; --teal-bg: #16292a;
+    --ok: #7fcf8a; --ok-bg: #18291b; --warn: #f0b95a; --warn-bg: #2d2412; --bad: #f28b82; --bad-bg: #331a18;
+    --code-bg: #262b30;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #e7e9e4; --ink-soft: #a9afa6; --paper: #15181b; --surface: #1d2125; --rule: #333a40;
+  --amber: #e0a547; --amber-bg: #2c2415; --teal: #5cc3c0; --teal-bg: #16292a;
+  --ok: #7fcf8a; --ok-bg: #18291b; --warn: #f0b95a; --warn-bg: #2d2412; --bad: #f28b82; --bad-bg: #331a18;
+  --code-bg: #262b30;
+}
+
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15.5px; line-height: 1.6; padding-inline: 16px; padding-block: 0 64px; }
+.wrap { max-width: 1120px; margin: 0 auto; }
+a { color: var(--teal); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+header.top { padding-block: 40px 28px; border-bottom: 3px solid var(--ink); display: grid; gap: 10px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(38px, 6vw, 60px); line-height: 1; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+.lede { max-width: 66ch; margin: 0; color: var(--ink-soft); font-size: 17px; }
+.parts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.parts a { font-family: var(--display); font-size: 20px; font-weight: 600; text-decoration: none; color: var(--ink); border: 2px solid var(--ink); padding: 4px 14px; letter-spacing: .02em; }
+.parts a:hover { background: var(--ink); color: var(--paper); }
+
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; margin-top: 32px; }
+nav.index { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; font-size: 14px; display: grid; gap: 14px; }
+nav.index .grp { display: grid; gap: 4px; }
+nav.index .grp-title { font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: .03em; text-transform: uppercase; border-bottom: 1px solid var(--rule); padding-bottom: 4px; margin-bottom: 2px; }
+nav.index a { color: var(--ink-soft); text-decoration: none; }
+nav.index a:hover { color: var(--teal); }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  nav.index { position: static; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); background: var(--surface); border: 1px solid var(--rule); padding: 14px 16px; }
+}
+
+main { min-width: 0; display: grid; gap: 8px; }
+.part-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; border-top: 3px solid var(--ink); padding-top: 18px; margin-top: 28px; }
+.part-head:first-child { margin-top: 0; }
+.part-head .tag { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 2px 8px; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 36px; line-height: 1.05; margin: 0; text-wrap: balance; }
+section { display: grid; gap: 12px; padding-block: 18px; border-bottom: 1px solid var(--rule); }
+h3 { font-family: var(--display); font-weight: 600; font-size: 25px; line-height: 1.15; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+h4 { font-size: 15px; margin: 6px 0 0; font-weight: 600; }
+p, li { max-width: 72ch; }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+ol.steps { list-style: none; padding: 0; counter-reset: s; gap: 12px; }
+ol.steps > li { counter-increment: s; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; align-items: start; }
+ol.steps > li::before { content: counter(s); font-family: var(--display); font-weight: 700; font-size: 20px; width: 30px; height: 30px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 50%; line-height: 1; }
+ol.steps > li > div { display: grid; gap: 6px; }
+
+code, .path { font-family: var(--mono); font-size: .88em; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+pre { font-family: var(--mono); font-size: 13.5px; background: var(--code-bg); padding: 12px 14px; margin: 0; overflow-x: auto; border-left: 3px solid var(--teal); user-select: all; }
+.ui { font-weight: 600; white-space: nowrap; }
+.ui::before { content: "\201C"; color: var(--ink-soft); font-weight: 400; }
+.ui::after { content: "\201D"; color: var(--ink-soft); font-weight: 400; }
+
+.note { background: var(--amber-bg); border-left: 3px solid var(--amber); padding: 10px 14px; display: grid; gap: 4px; }
+.note strong { color: var(--amber); font-family: var(--display); font-size: 17px; letter-spacing: .03em; text-transform: uppercase; }
+.tip { background: var(--teal-bg); border-left: 3px solid var(--teal); padding: 10px 14px; }
+
+.tw { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; background: var(--paper); }
+tr:last-child td { border-bottom: 0; }
+td.slide { font-family: var(--mono); white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+
+.pill { display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 500; padding: 1px 8px; border-radius: 10px; white-space: nowrap; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+
+dl.terms { display: grid; grid-template-columns: minmax(130px, 200px) minmax(0, 1fr); gap: 8px 18px; margin: 0; }
+dl.terms dt { font-weight: 600; }
+dl.terms dd { margin: 0; max-width: 64ch; }
+@media (max-width: 560px) { dl.terms { grid-template-columns: minmax(0, 1fr); } dl.terms dd { margin-bottom: 8px; } }
+
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; }
+.flow span.box { border: 1.5px solid var(--ink); padding: 6px 10px; background: var(--surface); }
+.flow span.arrow { color: var(--ink-soft); font-family: var(--mono); }
+footer { margin-top: 36px; color: var(--ink-soft); font-size: 13px; }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">SSV Channel · Sales &amp; Stock Visibility · app 0.6.4 · agent 0.6.0</div>
+  <h1>Distributor sales and stock, straight from Tally to ERPNext</h1>
+  <p class="lede">How the manufacturer's team reads the reports and runs its distributors in ERPNext, and how a distributor's PC is set up so its TallyPrime data arrives on its own.</p>
+  <div class="parts"><a href="#manufacturer">Manufacturer team</a><a href="#distributor">Distributor PC</a></div>
+</header>
+
+<div class="layout">
+<nav class="index" aria-label="Sections">
+  <div class="grp"><div class="grp-title">Manufacturer</div>
+    <a href="#how">How data arrives</a><a href="#login">Log in</a><a href="#daily">Daily check</a><a href="#reports">Reports by deck slide</a>
+    <a href="#using">Using a report</a><a href="#terms">What the figures mean</a><a href="#distributors">Adding a distributor</a>
+    <a href="#items">Items and mapping</a><a href="#alerts">Alerts</a><a href="#leaving">When a distributor leaves</a></div>
+  <div class="grp"><div class="grp-title">Distributor PC</div>
+    <a href="#needs">What is needed</a><a href="#install">Install</a><a href="#check">Check it works</a><a href="#privacy">What leaves the PC</a>
+    <a href="#update">Update or remove</a></div>
+  <div class="grp"><div class="grp-title">Both</div><a href="#trouble">Troubleshooting</a></div>
+</nav>
+
+<main>
+<div class="part-head" id="manufacturer"><span class="tag">Part 1</span><h2>Manufacturer team, in ERPNext</h2></div>
+
+<section id="how">
+  <h3>How data arrives</h3>
+  <div class="flow"><span class="box">Distributor's TallyPrime</span><span class="arrow">→</span><span class="box">SSV agent on the same PC keeps only your items</span><span class="arrow">→</span><span class="box">Signed upload</span><span class="arrow">→</span><span class="box">Your ERPNext: SSV Channel</span></div>
+  <p>The agent reads the distributor's bills and closing stock from TallyPrime every few minutes (you set how often). It sends only the lines for items under your stock group, so other brands on the same bill never leave the distributor's PC. Edits and deletions in Tally follow automatically. Nothing here posts to your accounts or your own stock ledger.</p>
+  <p>A distributor that sells for several manufacturers runs one agent for all of them. It sends through the SSV hub, which delivers each manufacturer's lines to that manufacturer's ERPNext only. Your reports look the same either way.</p>
+</section>
+
+<section id="login">
+  <h3>Log in</h3>
+  <p>Open your site, for the pilot <a href="https://ssv-test.rajlaxmiworld.in/login">ssv-test.rajlaxmiworld.in</a>, and sign in. Everything lives in the <span class="ui">SSV Channel</span> workspace in the sidebar; the <span class="ui">SSV Dashboard</span> shortcut is at its top.</p>
+  <div class="tip">Give each colleague their own login (User → New) with the role <span class="ui">Sales Manager</span> to read reports, or <span class="ui">System Manager</span> to manage distributors. Keep Administrator for emergencies.</div>
+</section>
+
+<section id="daily">
+  <h3>Daily two-minute check</h3>
+  <ol class="steps">
+    <li><div><p>Open <span class="ui">SSV Sync Health</span>. Every distributor should be <span class="pill ok">OK</span>. The <span class="ui">Reconciled</span> column shows when your site last checked its totals against the agent's (agent 0.5.3+).</p>
+      <div class="tw"><table>
+        <thead><tr><th>Status</th><th>Meaning</th><th>Do this</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill ok">OK</span></td><td>A successful run recently</td><td>Nothing</td></tr>
+          <tr><td><span class="pill bad">Failing</span></td><td>The agent runs but its last run failed; the Problem column says why, e.g. TallyPrime not open</td><td>Call the distributor with the problem text</td></tr>
+          <tr><td><span class="pill warn">Stale</span></td><td>No successful run or data for 24 hours (or twice the distributor's interval, if longer)</td><td>Ask whether the PC and TallyPrime are on</td></tr>
+          <tr><td><span class="pill bad">Silent</span></td><td>Nothing for three times that long, or never</td><td>Check the agent is installed; see Troubleshooting</td></tr>
+          <tr><td><span class="pill bad">Errors</span></td><td>Batches refused in the period</td><td>Open <span class="ui">SSV Ingest Log</span>, filter Status = Rejected, read the reason</td></tr>
+          <tr><td><span class="pill bad">Mismatch</span></td><td>Once a day the agent sends totals of what it delivered: bills, quantity and value per month. They differ from what your site holds. The Problem column names the months.</td><td>Tell your SSV support contact, and give them the Problem text</td></tr>
+        </tbody></table></div></div></li>
+    <li><div><p>Glance at the <span class="ui">SSV Dashboard</span>: quarter, zone, month-on-month against last year, top categories and brands. The line under its title reads <span class="pill ok">Data up to date from 3 of 3 distributors</span>. When it turns orange, it names the distributors behind: until they catch up, the figures are short by their share.</p></div></li>
+    <li><div><p>If a distributor's figures look old, open it (<span class="ui">SSV Distributor</span>) and press <span class="ui">Sync Now</span>. A running agent starts within about 2 minutes, and the line at the top of the form shows the result.</p></div></li>
+  </ol>
+</section>
+
+<section id="reports">
+  <h3>Reports by deck slide</h3>
+  <p>Every screen in the "TallyPrime for Sales &amp; Stock Visibility" deck has a report here. Most are one report with different settings.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Slide</th><th>Deck screen</th><th>Open</th><th>Set</th></tr></thead>
+    <tbody>
+      <tr><td class="slide">14–15</td><td>Sales &amp; stock dashboard</td><td>SSV Dashboard</td><td>Distributor or territory, optional</td></tr>
+      <tr><td class="slide">16</td><td>Distributor sales &amp; stock qty</td><td>SSV Stock Summary</td><td>Group By: Distributor</td></tr>
+      <tr><td class="slide">17</td><td>Distributor sales summary</td><td>SSV Sales Analysis</td><td>Rows: Distributor · Columns: None · Show: Net Qty and Value</td></tr>
+      <tr><td class="slide">18</td><td>Sales summary with product details</td><td>SSV Sales Analysis</td><td>Rows: Distributor &gt; Item</td></tr>
+      <tr><td class="slide">19</td><td>Distributor stock summary</td><td>SSV Stock Summary</td><td>Group By: Distributor &gt; Item</td></tr>
+      <tr><td class="slide">20</td><td>Details of stock summary</td><td>SSV Stock Summary</td><td>Group By: Distributor &gt; Category &gt; Item</td></tr>
+      <tr><td class="slide">21</td><td>Stock position by state / city / zone</td><td>SSV Stock Summary</td><td>Group By: Zone &gt; State &gt; City &gt; Distributor</td></tr>
+      <tr><td class="slide">22</td><td>Sub-category sales summary</td><td>SSV Sales Analysis</td><td>Rows: Sub-Category &gt; Item</td></tr>
+      <tr><td class="slide">23</td><td>Brand, vertical</td><td>SSV Sales Analysis</td><td>Rows: Brand &gt; Category &gt; Item</td></tr>
+      <tr><td class="slide">24</td><td>Brand, horizontal</td><td>SSV Sales Analysis</td><td>Rows: Distributor · Columns: Brand</td></tr>
+      <tr><td class="slide">25</td><td>Product type / category</td><td>SSV Sales Analysis</td><td>Rows: Category &gt; Item</td></tr>
+      <tr><td class="slide">26</td><td>Pack-wise analysis</td><td>SSV Sales Analysis</td><td>Rows: Pack Size &gt; Category &gt; Item</td></tr>
+      <tr><td class="slide">27</td><td>Retailer sales performance</td><td>SSV Retailer Performance</td><td>Distributor, period</td></tr>
+      <tr><td class="slide">28</td><td>Sales by product classification</td><td>SSV Sales Analysis</td><td>Rows: Product Line &gt; Brand &gt; Category &gt; Item</td></tr>
+      <tr><td class="slide">29</td><td>Distributor monthly comparison</td><td>SSV Sales Analysis</td><td>Rows: Distributor · Columns: Month</td></tr>
+      <tr><td class="slide">30–31</td><td>Stock penetration, current / last week</td><td>SSV Stock Penetration</td><td>Period: Current Week or Last Week</td></tr>
+      <tr><td class="slide">32</td><td>Sales &amp; purchase bill details</td><td>SSV Bill Register</td><td>Voucher Type, retailer, optional</td></tr>
+      <tr><td class="slide">33</td><td>Data sync log</td><td>SSV Sync Log, SSV Sync Health</td><td>Any date in the month</td></tr>
+      <tr><td class="slide">—</td><td>Closing stock, per godown</td><td>SSV Distributor Stock</td><td>As Of · tick Godown-wise</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="using">
+  <h3>Using a report</h3>
+  <ul>
+    <li><strong>Period:</strong> pick a preset (current FY, quarter, month, week, last week, last month, last quarter, last 15 days) or set From and To. Weeks run Sunday to Saturday.</li>
+    <li><strong>Tree:</strong> rows open level by level; the arrows expand and collapse. Every level carries its own sub-total.</li>
+    <li><strong>Chart:</strong> each main report draws a chart above the table from the same figures, largest first; month columns draw as lines.</li>
+    <li><strong>Filters:</strong> distributor, territory (a zone or state includes everything under it) and item work in every report.</li>
+    <li><strong>Export and print:</strong> the <span class="ui">⋯</span> menu at the top right exports to Excel or prints.</li>
+  </ul>
+</section>
+
+<section id="terms">
+  <h3>What the figures mean</h3>
+  <dl class="terms">
+    <dt>Net sale</dt><dd>Sales out minus credit notes (returns) in. Deleted and cancelled bills are left out.</dd>
+    <dt>Purchase</dt><dd>What the distributor bought, minus purchase returns.</dd>
+    <dt>Other</dt><dd>The balancing figure in Stock Summary: godown transfers, delivery notes not yet invoiced, and any difference between Tally's counted stock and the bills. Opening + Purchase − Net sale + Other = Closing on every row.</dd>
+    <dt>Closing stock</dt><dd>Tally's own figure, sent daily and after every change. Negative stock is shown in red, as Tally allows it.</dd>
+    <dt>Unallocated</dt><dd>In Godown-wise stock: the part of Tally's item total the godowns do not add up to.</dd>
+    <dt>Outlets billed</dt><dd>Distinct retailers billed in the period, counted at every level (never summed).</dd>
+    <dt>(unmapped)</dt><dd>A Tally item not yet linked to one of your Items. See Items and mapping.</dd>
+    <dt>Deleted in Tally</dt><dd>A bill deleted in the distributor's Tally. It stays visible on the bill, marked, and drops out of every report.</dd>
+  </dl>
+</section>
+
+<section id="distributors">
+  <h3>Adding a distributor</h3>
+  <ol class="steps">
+    <li><div><p><span class="ui">SSV Distributor</span> → New. Distributor ID (e.g. <code>DIST-002</code>), name, and <strong>Territory</strong> set to the city: its parents give the state and zone in reports.</p></div></li>
+    <li><div><p>Under <span class="ui">Which Tally items belong to this principal</span>, add a rule with your stock group spelled exactly as in that distributor's Tally, for example Stock Group = <code>Ceat Tyre</code>. Sub-groups are included.</p></div></li>
+    <li><div><p>Set <span class="ui">Sync Every (Minutes)</span>: 5 to 1440 (once a day). Save.</p></div></li>
+    <li><div><p><span class="ui">Actions → Show Agent Secret</span> shows five lines. Send them to whoever sets up the distributor's PC, privately; they are the key to that distributor's account.</p></div></li>
+    <li><div><p>Record the distributor's <span class="ui">Data Sharing Consent Date</span>. Tick <span class="ui">Shares Cost Price</span> only if they agreed; margin columns also need SSV Settings → Show Cost And Margin.</p>
+      <p>To make that a hard rule, tick <span class="ui">SSV Settings → Hold Data Until Consent Is Recorded</span>. Your site then accepts no data from a distributor until its consent date is filled in. Its agent keeps the data and retries, so nothing is lost.</p></div></li>
+  </ol>
+</section>
+
+<section id="items">
+  <h3>Items and mapping</h3>
+  <p>Reports group by the <span class="ui">Channel Classification</span> fields on each Item: Product Line, Channel Category, Sub-Category, Pack Size, Size Group, Size Sort Order and Product Class, plus Brand. Empty fields show as "(not set)".</p>
+  <p>A Tally item is linked automatically when its name or code equals one of your Items. Others appear in <span class="ui">SSV Channel Item</span> as <em>Unmapped</em>: open one, set <span class="ui">Item</span>, save. Past bills follow the new link at once.</p>
+  <p>Distributors name items their own way, so the site suggests the closest of your Items. It compares words, sizes and part numbers, and never suggests a different size. In the list, those items show as <em>Suggested</em>.</p>
+  <ul>
+    <li>To accept one, open it, check the suggestion and press <span class="ui">Use Suggestion</span>.</li>
+    <li>To accept many, tick them in the list and choose <span class="ui">Actions → Accept Suggested Items</span>.</li>
+    <li>After adding new Items, press <span class="ui">Refresh Suggestions</span>.</li>
+  </ul>
+  <p>Nothing is linked without someone accepting it.</p>
+  <p><strong>Cases and pieces.</strong> If a distributor keeps an item in another unit, set <span class="ui">Conversion Factor</span> on its SSV Channel Item: how many of your units make one of theirs, for example 12 if they count cases of 12 and you count pieces. Quantities in every report, past ones included, change at once; values stay as billed.</p>
+</section>
+
+<section id="alerts">
+  <h3>Alerts</h3>
+  <p>Put addresses in <span class="ui">SSV Settings → Send Alerts To</span>. Each morning one e-mail lists:</p>
+  <ul>
+    <li>failing distributors, with the reason;</li>
+    <li>silent distributors;</li>
+    <li>distributors whose totals differ from the agent's;</li>
+    <li>items whose latest closing stock is negative.</li>
+  </ul>
+  <p>No e-mail is sent when all is well. The site needs an outgoing e-mail account. To check the setup, press <span class="ui">Send Test Alert</span> on SSV Settings: it sends today's alert at once, or says what's missing.</p>
+</section>
+
+<section id="leaving">
+  <h3>When a distributor leaves</h3>
+  <p>When a distributor's consent ends, the consent letter promises to delete its data.</p>
+  <ol class="steps">
+    <li><div><p>Open the <span class="ui">SSV Distributor</span>, untick <span class="ui">Enabled</span> and save. No new data is accepted from then on.</p></div></li>
+    <li><div><p><span class="ui">Actions → Delete Channel Data</span>, and type the Distributor ID to confirm. Every bill, stock figure, item, retailer and log received from that distributor is deleted. The old agent's secret is replaced, so it can't send again.</p></div></li>
+  </ol>
+  <p>The distributor record itself stays, with its consent date and a note of who deleted what and when.</p>
+</section>
+
+<div class="part-head" id="distributor"><span class="tag">Part 2</span><h2>Distributor PC, the agent</h2></div>
+
+<section id="needs">
+  <h3>What is needed</h3>
+  <ul>
+    <li>A Windows 10 or 11 PC that runs the distributor's TallyPrime, with internet access.</li>
+    <li>TallyPrime open with the distributor's company. In TallyPrime: <span class="ui">F1 Help → Settings → Connectivity</span>, set <span class="ui">TallyPrime acts as</span> to Both or Server, port 9000.</li>
+    <li>The agent package (<code>ssv-agent-…-win-x64.zip</code>) and the five settings lines from the manufacturer.</li>
+    <li>An administrator login on the PC, once, for the install.</li>
+  </ul>
+</section>
+
+<section id="install">
+  <h3>Install</h3>
+  <ol class="steps">
+    <li><div><p>Unzip the package into any folder, then double-click <code>install.cmd</code> and accept the Windows prompt.</p>
+      <p>It installs the <span class="ui">SSV Tally Connector</span> service, which starts with Windows and restarts itself if it stops. It also shows a <strong>setup password</strong> (write it down), puts an <span class="ui">SSV Agent Setup</span> shortcut on the desktop, and opens the setup page.</p></div></li>
+    <li><div><p>On the setup page, sign in with that password.</p>
+      <ul>
+        <li><strong>Connection:</strong> paste the lines from the manufacturer's <span class="ui">Show Agent Secret</span>, press <span class="ui">Test connection</span>, then <span class="ui">Save and restart</span>. The test shows exactly which stock groups the site will receive.</li>
+        <li><strong>Tally:</strong> press <span class="ui">Check Tally and list companies</span>, pick the distributor's company, <span class="ui">Save and restart</span>.</li>
+        <li><strong>Status:</strong> shows the last sync, what is waiting, and a <span class="ui">Sync now</span> button.</li>
+      </ul></div></li>
+  </ol>
+  <div class="tip">The setup page opens only on this PC (<code>http://127.0.0.1:4100</code>) and needs the setup password. It never shows the agent secret, only whether one is set. Forgot the password? It is <code>LOCAL_API_TOKEN</code> in <span class="path">C:\ProgramData\SSVConnector\.env</span>; open it with Notepad as an administrator.</div>
+  <div class="tw"><table>
+    <thead><tr><th>What</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>Program</td><td><span class="path">C:\Program Files\SSV Agent</span></td></tr>
+      <tr><td>Settings (.env)</td><td><span class="path">C:\ProgramData\SSVConnector\.env</span>, readable by administrators only</td></tr>
+      <tr><td>Agent's store</td><td><span class="path">C:\ProgramData\SSVConnector\data</span></td></tr>
+      <tr><td>Log</td><td><span class="path">C:\ProgramData\SSVConnector\logs\agent.log</span></td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="check">
+  <h3>Check it works</h3>
+  <p>On the manufacturer's side, the distributor's form shows <em>Agent 0.6.0, last contact …, Last run OK</em>, and within the day SSV Sync Health shows it <em>Reconciled OK</em> within a few minutes. On the PC, the last lines of the log should read like this:</p>
+  <pre>service: started ssv-agent.exe (pid 7484)
+INFO  Syncing every 5 min (set in ERPNext)</pre>
+</section>
+
+<section id="privacy">
+  <h3>What leaves the PC</h3>
+  <p>Only data about the manufacturer's items leaves the PC. The agent only reads TallyPrime; it never changes the books.</p>
+  <ul>
+    <li><strong>Bill lines</strong> for the manufacturer's items: item, quantity, rate, discount, amount, godown, batch, date, voucher type, bill and reference number.</li>
+    <li><strong>The party on those bills:</strong> name, GSTIN, state and price level, as kept in Tally, plus phone, address and PIN code unless the distributor keeps them on its PC. To keep them, set <code>SHARE_RETAILER_CONTACTS=false</code> in the agent's <code>.env</code> (agent 0.5.1+). The manufacturer's site then deletes any it already holds.</li>
+    <li><strong>Stock</strong> of those items: opening and closing quantity and value (at the distributor's valuation), with the closing figure split by godown.</li>
+    <li><strong>Run reports:</strong> agent version, sync times, and whether the last run worked.</li>
+  </ul>
+  <p>Other brands on the same bill, bill totals, taxes, ledgers and accounts stay on the PC. Every upload is signed with the distributor's own secret and sent over HTTPS. The distributor's consent letter lists every field.</p>
+</section>
+
+<section id="update">
+  <h3>Update or remove</h3>
+  <p><strong>Automatic updates (agent 0.5 and later).</strong> When the manufacturer approves a new version, the service downloads it between syncs and checks its fingerprint (SHA-256). Then it swaps the program and restarts. If the new version fails three times within two minutes, the service puts the previous one back by itself.</p>
+  <ul>
+    <li><strong>Approve a version:</strong> the manufacturer fills three fields in <span class="ui">SSV Settings</span>: <span class="ui">Approved Agent Version</span>, <span class="ui">Agent Download URL</span> and <span class="ui">Agent SHA-256</span>.</li>
+    <li><strong>Opt a distributor out:</strong> untick <span class="ui">Update Agent Automatically</span> on the distributor.</li>
+  </ul>
+  <p>To update by hand, unzip the new package and run its <code>install.cmd</code>: settings and the store are kept. To remove, run <code>uninstall.cmd</code> in <span class="path">C:\Program Files\SSV Agent</span>; add <code>-Purge</code> to delete settings and data as well.</p>
+</section>
+
+<div class="part-head" id="trouble-head"><span class="tag">Both</span><h2>Troubleshooting</h2></div>
+<section id="trouble">
+  <div class="tw"><table>
+    <thead><tr><th>You see</th><th>Cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Failing: "TallyPrime is not reachable"</td><td>TallyPrime closed, or its connectivity setting is off</td><td>Open TallyPrime; check F1 → Settings → Connectivity, port 9000</td></tr>
+      <tr><td>Failing: "No company is open"</td><td>TallyPrime is open without the company</td><td>Alt+F3 → Select Company</td></tr>
+      <tr><td>Failing: "… not reachable" for the site, or upload paused</td><td>No internet on the PC, or the site is down</td><td>Nothing is lost; data goes on the next run once it is back</td></tr>
+      <tr><td>Refused, HTTP 401, "Bad signature"</td><td>Wrong secret, or the PC clock is more than 5 minutes off</td><td>Re-copy the five lines; set Windows time to automatic</td></tr>
+      <tr><td>Silent, never seen</td><td>Agent not installed, or wrong ERPNext address in .env</td><td>Open the address from .env in a browser on that PC; reinstall</td></tr>
+      <tr><td>Items show "(unmapped)"</td><td>Tally name differs from your Item</td><td>Set the Item on the SSV Channel Item</td></tr>
+      <tr><td>Godown-wise shows "Unallocated"</td><td>Tally's godowns do not add up to its item total</td><td>Tell the distributor; Tally's total is used everywhere else</td></tr>
+      <tr><td>Company blocked: "Repair (rewrite) the company data"</td><td>Tally's change counter is damaged</td><td>In TallyPrime, repair the company data, then Sync Now</td></tr>
+    </tbody></table></div>
+</section>
+
+<footer>SSV Channel 0.4 · agent 0.4 with Windows service · reports follow the Global Software deck, slides 14–33.</footer>
+</main>
+</div>
+</div>

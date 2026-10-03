@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-09-24 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "rule_type",
+  "tally_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "rule_type",
+   "fieldtype": "Select",
+   "label": "Rule Type",
+   "options": "Stock Group\nStock Category\nItem",
+   "reqd": 1,
+   "in_list_view": 1,
+   "default": "Stock Group"
+  },
+  {
+   "fieldname": "tally_value",
+   "fieldtype": "Data",
+   "label": "Name in Tally",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "Stock group / category / item name exactly as in the distributor's Tally. A stock group includes its sub-groups."
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "links": [],
+ "modified": "2026-09-24 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SSV Channel",
+ "name": "SSV Distributor Rule",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

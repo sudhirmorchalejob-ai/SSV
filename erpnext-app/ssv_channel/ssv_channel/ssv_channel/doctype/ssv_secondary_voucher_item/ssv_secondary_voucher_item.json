@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-09-24 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "channel_item",
+  "tally_item_name",
+  "direction",
+  "qty",
+  "billed_qty",
+  "unit",
+  "rate",
+  "amount",
+  "discount_pct",
+  "godown",
+  "batch",
+  "is_tracked"
+ ],
+ "fields": [
+  {
+   "fieldname": "channel_item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "SSV Channel Item",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tally_item_name",
+   "fieldtype": "Data",
+   "label": "Item Name in Tally",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "direction",
+   "fieldtype": "Select",
+   "label": "Direction",
+   "options": "out\nin",
+   "in_list_view": 1,
+   "description": "out = goods leave the distributor, in = goods come back"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Qty",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "billed_qty",
+   "fieldtype": "Float",
+   "label": "Billed Qty"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "label": "Rate",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "discount_pct",
+   "fieldtype": "Float",
+   "label": "Discount %"
+  },
+  {
+   "fieldname": "godown",
+   "fieldtype": "Data",
+   "label": "Godown"
+  },
+  {
+   "fieldname": "batch",
+   "fieldtype": "Data",
+   "label": "Batch"
+  },
+  {
+   "fieldname": "is_tracked",
+   "fieldtype": "Check",
+   "label": "Against Delivery / Receipt Note",
+   "description": "Stock already moved on the linked note; counted as a sale, not as a second stock movement"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "links": [],
+ "modified": "2026-09-24 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SSV Channel",
+ "name": "SSV Secondary Voucher Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}
