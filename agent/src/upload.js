@@ -19,9 +19,9 @@ import { config } from "./config.js";
 import { logger } from "./logger.js";
 import { openDb, tx, getCompany, PENDING, DONE, REJECTED } from "./db.js";
 import { splitByPrincipal } from "./principals.js";
-import { partiesByName } from "./sync/store.js";
+import { partiesByName, partiesHeldByPrincipal } from "./sync/store.js";
 
-export const AGENT_VERSION = "0.6.1";
+export const AGENT_VERSION = "0.6.2";
 
 export function sign(body, timestamp, secret = config.middleware.agentSecret) {
   return crypto.createHmac("sha256", secret).update(`${timestamp}.${body}`).digest("hex");
@@ -232,7 +232,9 @@ async function uploadVouchers(company, ctx, report) {
         return envelope("vouchers", code, company, {
           vouchers: vs,
           tombstones: part.filter((r) => r.type === "tombstone").map((r) => r.t),
-          parties: parties.map(partyForUpload),
+          // Not .map(partyForUpload): map's index would arrive as shareContacts, and index 0
+          // dropped the first party's contacts in every batch (0.5.1–0.6.1).
+          parties: parties.map((p) => partyForUpload(p)),
           // Tells the receiver to drop any contacts it already holds for this distributor.
           party_contacts: config.upload.retailerContacts,
         });
@@ -258,6 +260,37 @@ async function uploadVouchers(company, ctx, report) {
     }
     finishPage(company.guid, rows, byGuid, needs, accepted, rejected, sentTo);
   }
+}
+
+/**
+ * Retailer details that changed in Tally (address, phone, GSTIN …) go again to each principal
+ * already holding a bill of that party, in a vouchers batch without vouchers, so an edit reaches
+ * the site without waiting for the next bill. A principal never gets a party it has no bill of.
+ * @param names  party names to send, or null for every party a principal holds
+ */
+export async function uploadParties(company, names) {
+  const wanted = names ? new Set(names) : null;
+  const report = { parties: 0, requests: 0, rejected: 0 };
+  for (const [code, held] of partiesHeldByPrincipal(company.guid)) {
+    const send_ = [...held].filter((n) => !wanted || wanted.has(n));
+    if (!send_.length) continue;
+    const parties = partiesByName(company.guid, send_).map((p) => partyForUpload(p));
+    const build = (part) => envelope("vouchers", code, company, {
+      vouchers: [], tombstones: [], parties: part, party_contacts: config.upload.retailerContacts,
+    });
+    for (const part of chunkBySize(parties, build)) {
+      try {
+        await send(build(part));
+        report.parties += part.length;
+      } catch (err) {
+        if (!(err instanceof Rejected)) throw err;
+        logger.error(`Middleware refused retailer details for ${code}: ${err.message}`);
+        report.rejected += part.length;
+      }
+      report.requests++;
+    }
+  }
+  return report;
 }
 
 /** A party as sent: contacts only when the distributor shares them (SHARE_RETAILER_CONTACTS). */

@@ -9,8 +9,8 @@ sync interval configurable per distributor (5 min to daily) plus "Sync now".
 
 | Folder | What | Status |
 |---|---|---|
-| `agent/` | Connector agent on the distributor PC. Reads TallyPrime, stages in SQLite, sends each principal only its own items. | v0.6.1, 58 tests pass. Local **setup page** (http://127.0.0.1:4100). Windows service (`SSVAgentService.exe`, built from source with the .NET Framework compiler) and `install.cmd` / `uninstall.cmd`, **installed for real on the test PC** (29-Sep) and **auto-updated five times** there (0.5.0 → 0.6.1). **Run against a real TallyPrime** (Educational mode): figures match the Sales Register to the rupee; edits, deletions, a CEAT line removed from a mixed bill, a godown transfer and an ERPNext outage all followed through correctly |
-| `erpnext-app/ssv_channel/` | Frappe v15 app: non-accounting DocTypes, signed ingest API, item classification, the deck's reports (slides 14–33) with charts, godown-wise distributor stock, per-distributor sync interval and Sync Now, agent run reports, daily alerts, SSV Monthly Summary for speed. The agent can post to it directly. | v0.6.6, **installed on the test bench** (ssv-test, principal CEAT); 48 bench tests pass; security-reviewed 29-Sep. **Load-tested** at 160,613 vouchers / 364,331 lines from 50 distributors: every report ≤ 2.5 s, figures identical to the voucher path and to the generator |
+| `agent/` | Connector agent on the distributor PC. Reads TallyPrime, stages in SQLite, sends each principal only its own items. | v0.6.2, 62 tests pass. Local **setup page** (http://127.0.0.1:4100). Windows service (`SSVAgentService.exe`, built from source with the .NET Framework compiler) and `install.cmd` / `uninstall.cmd`, **installed for real on the test PC** (29-Sep) and **auto-updated five times** there (0.5.0 → 0.6.1). **Run against a real TallyPrime** (Educational mode): figures match the Sales Register to the rupee; edits, deletions, a CEAT line removed from a mixed bill, a godown transfer and an ERPNext outage all followed through correctly |
+| `erpnext-app/ssv_channel/` | Frappe v15 app: non-accounting DocTypes, signed ingest API, item classification, the deck's reports (slides 14–33) with charts, godown-wise distributor stock, per-distributor sync interval and Sync Now, agent run reports, daily alerts, SSV Monthly Summary for speed, and (0.8.0) the retailer layer: retailer master with IDs, status, contacts and consent, a Retailers section on each distributor, the SSV Retailers report and the SSV Retailer Dashboard. The agent can post to it directly. | v0.6.6, **installed on the test bench** (ssv-test, principal CEAT); 48 bench tests pass; security-reviewed 29-Sep. **Load-tested** at 160,613 vouchers / 364,331 lines from 50 distributors: every report ≤ 2.5 s, figures identical to the voucher path and to the generator. **0.8.1 (retailer layer) installed on ssv-test 03-Oct**, 61 bench tests pass; 0.7.0 backed up first (`~/ssv-backup-before-0.8.0`, `~/ssv_channel-0.7.0-saved` on the server) |
 | `middleware/` | The hub: one agent per distributor feeds every manufacturer it sells for. It routes each manufacturer's lines to that manufacturer's ERPNext only, merges their rules, and passes run reports and approved updates. Same batch contract, so agents need only a URL change. | v0.1.0, 8 tests pass (including the real agent feeding two manufacturers). Running on the test server behind the tunnel at `/agent/v1/`. See its README |
 
 ## Agent
@@ -165,6 +165,19 @@ with this app, and its dealers run the same agent.
     rebinding. The secret is write-only.
 - **Agent 0.6.1:** fixes the stock-group path. Every second item in a group was sent reversed,
   because a cached array was reversed in place.
+- **Agent 0.6.2 (03-Oct), retailer contacts fix, found by adding retailers with full details to the test
+  companies:**
+  - **The bug:** since 0.5.1, the first retailer in every vouchers batch arrived without phone,
+    address and PIN code. `parties.map(partyForUpload)` passed each party's index as the "share
+    contacts" argument, and index 0 counts as "no". Worse, a retailer whose contacts the site
+    already held lost them again whenever it came first in a later batch.
+  - **Retailer edits now reach the site:** a party ledger changed in Tally (address, phone, GSTIN …)
+    is re-sent to each principal that already holds one of its bills, in a vouchers batch without
+    vouchers. A principal never receives a party it has no bill of.
+  - **Repair:** the first run after the upgrade re-sends every party once, which restores the lost
+    contacts. On the test PC: 3, 45 and 43 retailers re-sent, all contacts correct in ERPNext. A
+    changed mobile number reached ERPNext on the next sync, with no new bill.
+  - **Build:** `build-exe.mjs` works from a folder whose name has spaces.
 - **App 0.6.5, *Apply Wording*** on SSV Settings. It writes site translations so every label says
   Dealer and Customer instead of Distributor and Retailer. Nothing else changes.
 - **App 0.6.6, *Create Items from Selected*** on SSV Channel Item. It creates Items named as in Tally,

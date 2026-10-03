@@ -1,3 +1,4 @@
 [pre_model_sync]
 
 [post_model_sync]
+ssv_channel.patches.v0_8.retailer_ids

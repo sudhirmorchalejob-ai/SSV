@@ -411,12 +411,20 @@ def upsert_retailer(distributor: str, company: str, p: dict) -> str:
 		"price_level": p.get("priceLevel"),
 	}
 	name = frappe.db.get_value("SSV Retailer", {"tally_company": company, "ledger_name": p.get("name")}, "name")
+	if not name:
+		# Added by hand before its first bill, while the Tally company was not yet known.
+		name = frappe.db.get_value(
+			"SSV Retailer", {"distributor": distributor, "ledger_name": p.get("name"), "tally_company": ["is", "not set"]}, "name"
+		)
+		if name:
+			fields["tally_company"] = company
 	if name:
 		frappe.db.set_value("SSV Retailer", name, fields)
 		return name
 	return (
 		frappe.get_doc(
-			{"doctype": "SSV Retailer", "distributor": distributor, "tally_company": company, "ledger_name": p.get("name"), **fields}
+			{"doctype": "SSV Retailer", "distributor": distributor, "tally_company": company, "ledger_name": p.get("name"),
+				"source": "Tally", **fields}
 		)
 		.insert(ignore_permissions=True)
 		.name

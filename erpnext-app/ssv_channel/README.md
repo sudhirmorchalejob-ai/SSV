@@ -171,6 +171,55 @@ bench --site <site> execute ssv_channel.tools.load_test.cleanup
   valuation rate — nothing extra is taken from the distributor. Shown only when
   **SSV Settings → Show Cost And Margin** is on *and* the distributor has **Shares Cost Price** ticked.
 
+## Retailers (0.8.0)
+
+Manufacturer → Distributor → Retailer → Bill. A retailer is a party ledger in the distributor's
+Tally. The agent already sends the parties on each bill, so **SSV Retailer** records fill in by
+themselves; this version adds the screens and fields to manage and monitor them.
+
+- **SSV Retailer** gains a *Retailer ID* (RET-00001…, given automatically), *Status*
+  (Active/Inactive), *Contact Person*, *Mobile*, *Email*, *City*, *Zone*, *Data Sharing Consent* and
+  *Consent Date*, plus *Distributor Name*, *Manufacturer* (this site's principal code) and *Added From*.
+  - The sync never writes these. It keeps writing the Tally fields (name, GSTIN, address, state, PIN
+    code, phone, price level), which lock on the form once Tally has sent the retailer.
+  - A retailer stays under the distributor it was created for: *Distributor* is set once, and its
+    Tally company must be that distributor's.
+  - **Add by hand** (System Manager): type the name exactly as the ledger in the distributor's Tally.
+    Its first bill links to that record instead of creating a second one. One ledger name per
+    distributor and Tally company; a second is refused.
+  - **Deactivate** with *Status = Inactive*. A retailer with bills cannot be deleted.
+  - The form shows its **Activity**: transactions, bills, returns, active and cancelled, items, net
+    quantity, net sales value, last transaction, last sync, the latest bills and 12 months of sales.
+- **SSV Distributor** shows a **Retailers** section: totals, last activity, last sync and a table of
+  its retailers, each opening its record.
+- **SSV Retailers** report: every retailer with its distributor, manufacturer, place, status,
+  transactions, bills, cancelled, items, net quantity and value, last activity and last sync. Search by
+  Retailer ID or name; filter by distributor, manufacturer, state, city, zone, status and bill dates.
+  *No Bills For (Days)* lists active retailers that have gone quiet.
+- **SSV Retailer Dashboard** page: total, active, inactive, billed and quiet retailers; retailers by
+  distributor, state and city; the busiest retailers; activity by month; last sync per distributor;
+  and the active retailers with no recent bills. Same filters, plus a date range.
+
+What counts as a retailer: a party billed at least once (Sales or Credit Note), or one added by hand.
+Suppliers on purchase bills and cash ledgers never appear. Only retailers that bought this
+principal's items reach the site, as the agent filters every bill on the distributor's PC.
+
+Figures: net = sales out − returns in, without cancelled or deleted bills and items marked Ignored,
+as in *SSV Retailer Performance*. Quantities are in the distributor's Tally units.
+
+Access is unchanged: System Manager edits; Sales Manager and Sales User read. Every list and figure
+goes through Frappe's permission checks, so User Permissions on SSV Distributor limit a user to those
+distributors' retailers, on the new screens and the SSV Retailer list alike. (The older reports read
+the data directly and do not apply User Permissions.)
+
+0.8.1: the retailer screens read the distributors' *Last Data Received* directly. Frappe's list query
+drops every field whose name contains `_seen` (it clears its optional `_seen` column), so `get_list`
+never returned `last_seen_at`, and a distributor without run reports showed as *Silent*. Found by the
+bench tests after installing 0.8.0 on ssv-test (03-Oct).
+
+Upgrade: `bench --site <site> migrate` adds the fields and an index on the bill's retailer, and the
+patch `v0_8.retailer_ids` gives existing retailers their ID, status, manufacturer and distributor name.
+
 ## Alerts
 
 Daily, to **SSV Settings → Send Alerts To**:

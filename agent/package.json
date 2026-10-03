@@ -1,6 +1,6 @@
 {
   "name": "ssv-connector-agent",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Runs on the distributor's PC. Reads TallyPrime, keeps only each principal's items, and pushes signed batches to the SSV middleware.",
   "type": "module",
   "private": true,

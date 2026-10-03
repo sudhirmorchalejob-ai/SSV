@@ -495,3 +495,51 @@ test("retailer contacts leave the PC only if the distributor shares them", () =>
   assert.deepEqual(kept, { name: "Sharma Kirana", guid: "g1", group: "Sundry Debtors", gstin: "27ABCDE1234F1Z5", state: "Maharashtra", priceLevel: "Retail" });
   assert.ok(!("phone" in kept) && !("address" in kept) && !("pincode" in kept));
 });
+
+test("the first party in a batch keeps its contacts too (0.5.1–0.6.1 dropped them; field test 03-Oct)", async () => {
+  const fake = new FakeTally({ startingFrom: startDate });
+  seed(fake); // Sharma Kirana Store is the party of the first bill, so the first party of the batch
+  await run(fake);
+  const sent = batchesOf(fake, "vouchers").flatMap((b) => b.parties);
+  const sharma = sent.filter((p) => p.name === "Sharma Kirana Store");
+  assert.ok(sharma.length, "the party goes with its bills");
+  assert.ok(sharma.every((p) => p.phone === "9876543210" && p.pincode === "411001"), "with its contacts, wherever it falls in the batch");
+});
+
+test("a retailer edited in Tally is re-sent, only to principals that hold its bills", async () => {
+  const fake = new FakeTally({ startingFrom: startDate });
+  seed(fake); // Sharma: Dant Kanti (PATANJALI) and Colgate (COLGATE) · Gupta: Dant Kanti only
+  await run(fake);
+  const before = batchesOf(fake, "vouchers").length;
+
+  fake.parties[1] = { ...fake.parties[1], phone: "9123456780", address: "Shop 2, Station Road" };
+  fake.mst += 1;
+  const out = await run(fake);
+  const resent = batchesOf(fake, "vouchers").slice(before);
+  assert.equal(out.parties.parties, 1);
+  assert.ok(resent.length && resent.every((b) => b.vouchers.length === 0 && b.tombstones.length === 0), "details only, no bills");
+  assert.deepEqual(resent.map((b) => b.principal), ["PATANJALI"], "Colgate has no bill of Gupta's, so it never learns of the change");
+  assert.deepEqual(resent[0].parties.map((p) => [p.name, p.phone, p.address]), [["Gupta General Store", "9123456780", "Shop 2, Station Road"]]);
+
+  const again = await run(fake);
+  assert.equal(again.parties, undefined, "nothing changed: nothing re-sent");
+});
+
+test("after upgrading from an agent that dropped contacts, every held party is re-sent once", async () => {
+  const fake = new FakeTally({ startingFrom: startDate });
+  seed(fake);
+  await run(fake);
+  const { kvSet } = await import("../src/db.js");
+  kvSet(fake.company.guid, "partyContactsResent", false); // as left by 0.6.1
+  const before = batchesOf(fake, "vouchers").length;
+
+  const out = await run(fake);
+  const resent = batchesOf(fake, "vouchers").slice(before);
+  const got = Object.fromEntries(resent.map((b) => [b.principal, b.parties.map((p) => p.name).sort()]));
+  assert.deepEqual(got, { PATANJALI: ["Gupta General Store", "Sharma Kirana Store"], COLGATE: ["Sharma Kirana Store"] });
+  assert.equal(out.parties.parties, 3);
+  assert.ok(resent.flatMap((b) => b.parties).filter((p) => p.name === "Sharma Kirana Store").every((p) => p.phone === "9876543210"));
+
+  const later = await run(fake);
+  assert.equal(later.parties, undefined, "once only");
+});

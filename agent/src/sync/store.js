@@ -199,12 +199,34 @@ export function allStockItems(companyGuid) {
   return openDb().prepare("SELECT data FROM stock_item WHERE company_guid = ?").all(companyGuid).map((r) => JSON.parse(r.data));
 }
 
+/** Store the party ledgers; returns the names of those that are new or changed. */
 export function applyParties(companyGuid, parties) {
+  const changed = [];
   tx((d) => {
+    const get = d.prepare("SELECT data FROM party WHERE company_guid = ? AND name = ?");
     const upsert = d.prepare(`INSERT INTO party (company_guid, name, data) VALUES (?, ?, ?)
       ON CONFLICT(company_guid, name) DO UPDATE SET data = excluded.data`);
-    for (const p of parties) upsert.run(companyGuid, p.name, JSON.stringify(p));
+    for (const p of parties) {
+      const data = JSON.stringify(p);
+      if (get.get(companyGuid, p.name)?.data !== data) changed.push(p.name);
+      upsert.run(companyGuid, p.name, data);
+    }
   });
+  return changed;
+}
+
+/** {principal: party names} for the live vouchers each principal holds. */
+export function partiesHeldByPrincipal(companyGuid) {
+  const rows = openDb().prepare(`SELECT DISTINCT vp.principal AS principal, json_extract(v.data, '$.partyLedger') AS party
+    FROM voucher v JOIN voucher_principal vp ON vp.company_guid = v.company_guid AND vp.master_id = v.master_id
+    WHERE v.company_guid = ? AND v.is_deleted = 0`).all(companyGuid);
+  const out = new Map();
+  for (const r of rows) {
+    if (!r.party) continue;
+    if (!out.has(r.principal)) out.set(r.principal, new Set());
+    out.get(r.principal).add(r.party);
+  }
+  return out;
 }
 
 export function partiesByName(companyGuid, names) {

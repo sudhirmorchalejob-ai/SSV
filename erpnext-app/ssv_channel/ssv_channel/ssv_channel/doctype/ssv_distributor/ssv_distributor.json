@@ -20,6 +20,8 @@
   "retailer_contacts_withheld",
   "rules_section",
   "rules",
+  "retailers_section",
+  "retailers_html",
   "agent_section",
   "sync_interval_minutes",
   "sync_requested_at",
@@ -138,6 +140,17 @@
    "options": "SSV Distributor Rule"
   },
   {
+   "fieldname": "retailers_section",
+   "fieldtype": "Section Break",
+   "label": "Retailers",
+   "depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "retailers_html",
+   "fieldtype": "HTML",
+   "label": "Retailers"
+  },
+  {
    "fieldname": "agent_section",
    "fieldtype": "Section Break",
    "label": "Agent"
@@ -217,7 +230,7 @@
  "istable": 0,
  "issingle": 0,
  "links": [],
- "modified": "2026-09-29 16:00:00.000000",
+ "modified": "2026-10-03 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SSV Channel",
  "name": "SSV Distributor",

@@ -13,8 +13,10 @@ import { build } from "esbuild";
 import { execFileSync } from "child_process";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const root = path.dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-z]:)/, "$1");
+// fileURLToPath decodes %20 etc., so the build works from a folder with spaces in its name.
+const root = path.dirname(fileURLToPath(import.meta.url));
 // SSV_BUILD_OUT builds elsewhere, e.g. while dist\ssv-agent.exe is running and locked.
 const out = process.env.SSV_BUILD_OUT ? path.resolve(process.env.SSV_BUILD_OUT) : path.join(root, "dist");
 const work = path.join(root, "build");

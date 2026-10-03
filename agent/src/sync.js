@@ -28,10 +28,11 @@ import { syncVouchers, CompanyBlocked } from "./sync/vouchers.js";
 import { shouldCheckDeleted, checkDeletedVouchers } from "./sync/deleted.js";
 import { refreshMasters, refreshStock } from "./sync/stock.js";
 import { allStockItems } from "./sync/store.js";
-import { uploadCompany, uploadControlTotals, pendingCounts, AGENT_VERSION } from "./upload.js";
+import { uploadCompany, uploadControlTotals, uploadParties, pendingCounts, AGENT_VERSION } from "./upload.js";
 import { config } from "./config.js";
 
 const today = () => new Date().toISOString().slice(0, 10);
+const PARTY_CONTACTS_REPAIRED = "partyContactsResent";
 
 let running = false;
 let lastRun = null;
@@ -154,6 +155,24 @@ async function syncCompany(tally, company, rules, warnings) {
   // Top group first. Copy before reversing: chain() returns a cached array, and
   // reversing it in place flipped every second path (seen as "Ceat Truck Tyre > Ceat Tyre").
   out.upload = await uploadCompany(c, { principalOf, principalsOf, baseTypeOf, groupPathOf: (g) => [...groups.chain(g)].reverse() });
+
+  // 5b. Retailer details changed in Tally. Once after upgrading from 0.5.1–0.6.1, every party
+  // a principal holds, as those versions dropped the contacts of the first party in each batch.
+  // A first sync has just sent every party with its bills, so it needs neither.
+  if (v.firstSyncCompleted) {
+    kvSet(c.guid, PARTY_CONTACTS_REPAIRED, true);
+  } else if (!out.upload.error) {
+    const repaired = kvGet(c.guid, PARTY_CONTACTS_REPAIRED) === true;
+    const names = repaired ? masters.changedParties : null;
+    if (!names || names.length) {
+      try {
+        out.parties = await uploadParties(c, names);
+        if (!repaired) kvSet(c.guid, PARTY_CONTACTS_REPAIRED, true);
+      } catch (err) {
+        out.parties = { error: err.message };
+      }
+    }
+  }
 
   // 6. Reconciliation totals: once a day, and straight after a restore or resync
   const lastTotals = kvGet(c.guid, "controlTotalsSentAt");

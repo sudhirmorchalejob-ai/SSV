@@ -5,20 +5,84 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "distributor",
-  "tally_company",
+  "retailer_id",
   "ledger_name",
+  "status",
+  "source",
+  "cb0",
+  "distributor",
+  "distributor_name",
+  "manufacturer",
+  "tally_company",
+  "activity_section",
+  "activity_html",
+  "contact_section",
+  "contact_person",
+  "mobile",
+  "email",
+  "gstin",
+  "cb1",
+  "address",
+  "city",
+  "state",
+  "zone",
+  "pincode",
+  "consent_section",
+  "data_sharing_consent",
+  "cb2",
+  "consent_date",
+  "tally_section",
   "tally_guid",
   "ledger_group",
-  "cb1",
-  "gstin",
+  "cb3",
   "phone",
-  "state",
-  "pincode",
-  "price_level",
-  "address"
+  "price_level"
  ],
  "fields": [
+  {
+   "fieldname": "retailer_id",
+   "fieldtype": "Data",
+   "label": "Retailer ID",
+   "read_only": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "bold": 1,
+   "no_copy": 1,
+   "description": "Given automatically (RET-00001, RET-00002 …)."
+  },
+  {
+   "fieldname": "ledger_name",
+   "fieldtype": "Data",
+   "label": "Retailer Name (as in Tally)",
+   "reqd": 1,
+   "in_list_view": 1,
+   "search_index": 1,
+   "read_only_depends_on": "eval:doc.tally_guid",
+   "description": "Exactly as the ledger is named in the distributor's Tally, so its bills link to this record."
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive",
+   "default": "Active",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Select",
+   "label": "Added From",
+   "options": "Manual\nTally",
+   "default": "Manual",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "cb0",
+   "fieldtype": "Column Break"
+  },
   {
    "fieldname": "distributor",
    "fieldtype": "Link",
@@ -26,75 +90,169 @@
    "options": "SSV Distributor",
    "reqd": 1,
    "in_list_view": 1,
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "distributor_name",
+   "fieldtype": "Data",
+   "label": "Distributor Name",
+   "fetch_from": "distributor.distributor_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "manufacturer",
+   "fieldtype": "Data",
+   "label": "Manufacturer",
+   "read_only": 1,
+   "description": "This site's principal code (SSV Settings)."
   },
   {
    "fieldname": "tally_company",
    "fieldtype": "Link",
    "label": "Tally Company",
    "options": "SSV Tally Company",
-   "reqd": 1
+   "reqd": 0,
+   "set_only_once": 1,
+   "description": "Filled in automatically when the distributor has one Tally company, or when its first bill arrives."
   },
   {
-   "fieldname": "ledger_name",
-   "fieldtype": "Data",
-   "label": "Name in Tally",
-   "reqd": 1,
-   "in_list_view": 1,
-   "search_index": 1
+   "fieldname": "activity_section",
+   "fieldtype": "Section Break",
+   "label": "Activity",
+   "depends_on": "eval:!doc.__islocal"
   },
   {
-   "fieldname": "tally_guid",
-   "fieldtype": "Data",
-   "label": "Tally GUID"
+   "fieldname": "activity_html",
+   "fieldtype": "HTML",
+   "label": "Activity"
   },
   {
-   "fieldname": "ledger_group",
+   "fieldname": "contact_section",
+   "fieldtype": "Section Break",
+   "label": "Contact and location"
+  },
+  {
+   "fieldname": "contact_person",
    "fieldtype": "Data",
-   "label": "Ledger Group"
+   "label": "Contact Person"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "label": "Mobile Number",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "gstin",
+   "fieldtype": "Data",
+   "label": "GST Number",
+   "read_only_depends_on": "eval:doc.tally_guid"
   },
   {
    "fieldname": "cb1",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "gstin",
-   "fieldtype": "Data",
-   "label": "GSTIN",
-   "in_list_view": 1
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address",
+   "read_only_depends_on": "eval:doc.tally_guid"
   },
   {
-   "fieldname": "phone",
+   "fieldname": "city",
    "fieldtype": "Data",
-   "label": "Phone"
+   "label": "City",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "state",
    "fieldtype": "Data",
    "label": "State",
+   "in_standard_filter": 1,
+   "read_only_depends_on": "eval:doc.tally_guid",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "zone",
+   "fieldtype": "Data",
+   "label": "Zone",
    "in_standard_filter": 1
   },
   {
    "fieldname": "pincode",
    "fieldtype": "Data",
-   "label": "Pincode"
+   "label": "Pincode",
+   "read_only_depends_on": "eval:doc.tally_guid"
+  },
+  {
+   "fieldname": "consent_section",
+   "fieldtype": "Section Break",
+   "label": "Data sharing"
+  },
+  {
+   "fieldname": "data_sharing_consent",
+   "fieldtype": "Check",
+   "label": "Data Sharing Consent"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "consent_date",
+   "fieldtype": "Date",
+   "label": "Consent Date",
+   "depends_on": "eval:doc.data_sharing_consent",
+   "mandatory_depends_on": "eval:doc.data_sharing_consent"
+  },
+  {
+   "fieldname": "tally_section",
+   "fieldtype": "Section Break",
+   "label": "From Tally",
+   "collapsible": 1,
+   "description": "Sent by the distributor's agent and updated on every sync."
+  },
+  {
+   "fieldname": "tally_guid",
+   "fieldtype": "Data",
+   "label": "Tally GUID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ledger_group",
+   "fieldtype": "Data",
+   "label": "Ledger Group",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone in Tally",
+   "read_only": 1
   },
   {
    "fieldname": "price_level",
    "fieldtype": "Data",
-   "label": "Price Level"
-  },
-  {
-   "fieldname": "address",
-   "fieldtype": "Small Text",
-   "label": "Address"
+   "label": "Price Level",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 0,
  "istable": 0,
  "issingle": 0,
  "links": [],
- "modified": "2026-09-24 12:00:00.000000",
+ "modified": "2026-10-03 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SSV Channel",
  "name": "SSV Retailer",
@@ -133,6 +291,7 @@
  "track_changes": 1,
  "autoname": "hash",
  "title_field": "ledger_name",
- "search_fields": "ledger_name,gstin",
- "naming_rule": "Random"
+ "search_fields": "retailer_id,ledger_name,gstin,city",
+ "naming_rule": "Random",
+ "show_title_field_in_link": 1
 }

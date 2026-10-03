@@ -373,6 +373,8 @@ def timings():
 		("SSV Distributor Stock", dict(as_of_date=today, godown_wise=1)),
 		("SSV Sync Log", dict(month=today)),
 		("SSV Sync Health", dict(from_date=add_days(today, -7), to_date=today)),
+		("SSV Retailers", dict()),
+		("SSV Retailers", dict(**FY)),
 	]
 	for report, flt in checks:
 		try:
@@ -384,6 +386,10 @@ def timings():
 	t = time.time()
 	dashboard.get_data()
 	print(f"  {time.time() - t:6.2f}s  SSV Dashboard")
+	from ssv_channel import retailers
+	t = time.time()
+	retailers.dashboard_data()
+	print(f"  {time.time() - t:6.2f}s  SSV Retailer Dashboard")
 
 	# The summary path must give exactly what the voucher lines give.
 	def totals(report, keys, **flt):

@@ -8,6 +8,7 @@ frappe.ui.form.on("SSV Distributor", {
 	refresh(frm) {
 		if (frm.is_new()) return;
 		show_agent_state(frm);
+		show_retailers(frm);
 
 		if (frm.perm[0] && frm.perm[0].write) {
 			frm.add_custom_button(__("Sync Now"), async () => {
@@ -71,4 +72,68 @@ function show_agent_state(frm) {
 	}
 	if (pending) text += " " + __("Sync requested {0}, waiting for the agent.", [ago(d.sync_requested_at)]);
 	frm.dashboard.set_headline(text, d.last_run_status === "Failed" ? "red" : pending ? "blue" : "green");
+}
+
+// Retailers section: who this distributor bills, and what its bills show (ssv_channel.retailers).
+const RETAILER_ROWS_SHOWN = 50;
+
+async function show_retailers(frm) {
+	const field = frm.fields_dict.retailers_html;
+	if (!field) return;
+	const name = frm.doc.name;
+	field.$wrapper.html(`<div class="text-muted small">${__("Loading retailers…")}</div>`);
+	let r;
+	try {
+		r = await frappe.call({ method: "ssv_channel.retailers.distributor_retailers", args: { distributor: name } });
+	} catch (e) {
+		field.$wrapper.html(`<div class="text-muted small">${__("Retailers could not be loaded.")}</div>`);
+		return;
+	}
+	if (frm.doc.name !== name) return; // the user moved to another distributor meanwhile
+	const { summary: s, retailers } = r.message;
+	const esc = frappe.utils.escape_html;
+	const date = (d) => (d ? frappe.datetime.str_to_user(d) : "—");
+	const ago = (d) => (d ? frappe.datetime.comment_when(d) : __("never"));
+	const pill = (text, colour) => `<span class="indicator-pill ${colour}">${esc(__(text))}</span>`;
+	const syncColour = (st) => (st === "OK" ? "green" : st === "Stale" ? "orange" : st ? "red" : "gray");
+
+	const stat = (label, value) => `<div style="min-width: 110px">
+		<div class="text-muted small">${label}</div><div style="font-size: 16px; font-weight: 600">${value}</div></div>`;
+	const header = `<div class="flex flex-wrap" style="gap: 18px 28px; margin-bottom: 12px">
+		${stat(__("Total Retailers"), format_number(s.total, null, 0))}
+		${stat(__("Active"), format_number(s.active, null, 0))}
+		${stat(__("Inactive"), format_number(s.inactive, null, 0))}
+		${stat(__("Transactions"), format_number(s.transactions, null, 0))}
+		${stat(__("Last Activity"), date(s.last_activity))}
+		${stat(__("Last Sync"), `${ago(s.last_sync)} ${s.sync_status ? pill(s.sync_status, syncColour(s.sync_status)) : ""}`)}
+	</div>`;
+
+	const body = retailers.slice(0, RETAILER_ROWS_SHOWN).map((x) => `<tr>
+		<td><a href="/app/ssv-retailer/${encodeURIComponent(x.name)}">${esc(x.retailer_id || x.name)}</a></td>
+		<td>${esc(x.ledger_name)}</td>
+		<td>${esc(x.city || x.state || "")}</td>
+		<td>${esc([x.contact_person, x.mobile || x.phone].filter(Boolean).join(" · "))}</td>
+		<td>${pill(x.status, x.status === "Active" ? "green" : "gray")}</td>
+		<td>${date(x.last_activity)}</td>
+		<td>${x.transactions ? pill("Receiving", "green") : pill("No bills yet", "gray")}</td>
+		<td>${ago(x.last_sync)}</td>
+		<td class="text-right">${format_number(x.transactions, null, 0)}</td>
+	</tr>`).join("");
+	const table = retailers.length
+		? `<div class="table-responsive"><table class="table table-bordered table-sm" style="margin-bottom: 8px">
+			<thead><tr>
+				<th>${__("Retailer ID")}</th><th>${__("Retailer Name")}</th><th>${__("City")}</th><th>${__("Contact")}</th>
+				<th>${__("Status")}</th><th>${__("Last Activity")}</th><th>${__("Data Received")}</th>
+				<th>${__("Last Sync")}</th><th class="text-right">${__("Transactions")}</th>
+			</tr></thead><tbody>${body}</tbody></table></div>`
+		: `<p class="text-muted">${__("No retailers yet. They appear with this distributor's first bills, or add one by hand.")}</p>`;
+	const more = retailers.length > RETAILER_ROWS_SHOWN
+		? `<p class="text-muted small">${__("Showing {0} of {1}.", [RETAILER_ROWS_SHOWN, retailers.length])}</p>` : "";
+	const $actions = $(`<div class="flex" style="gap: 8px">
+		<button class="btn btn-xs btn-default ssv-open-report">${__("Open in SSV Retailers")}</button>
+		${frappe.model.can_create("SSV Retailer") ? `<button class="btn btn-xs btn-default ssv-add-retailer">${__("Add Retailer")}</button>` : ""}
+	</div>`);
+	$actions.find(".ssv-open-report").on("click", () => frappe.set_route("query-report", "SSV Retailers", { distributor: name }));
+	$actions.find(".ssv-add-retailer").on("click", () => frappe.new_doc("SSV Retailer", { distributor: name }));
+	field.$wrapper.empty().append(header, table, more, $actions);
 }

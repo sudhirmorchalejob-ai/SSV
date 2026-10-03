@@ -31,7 +31,7 @@ export async function refreshMasters(tally, company, row) {
   const cachedGroups = kvGet(company.guid, "stockGroups");
   const cachedTypes = kvGet(company.guid, "voucherTypes");
   if (row.masters_alt_mst_id === company.altMstId && cachedGroups && cachedTypes) {
-    return { changed: false, stockGroups: cachedGroups, voucherTypes: cachedTypes, items: null };
+    return { changed: false, stockGroups: cachedGroups, voucherTypes: cachedTypes, items: null, changedParties: [] };
   }
 
   const stockGroups = await tally.fetchStockGroups(company.name);
@@ -41,11 +41,11 @@ export async function refreshMasters(tally, company, row) {
 
   kvSet(company.guid, "stockGroups", stockGroups);
   kvSet(company.guid, "voucherTypes", voucherTypes);
-  applyParties(company.guid, parties);
+  const changedParties = applyParties(company.guid, parties);
   const changedItems = applyStockItems(company.guid, items);
   upsertCompany(company.guid, { masters_alt_mst_id: company.altMstId });
   logger.info(`"${company.name}": masters refreshed (${items.length} items, ${changedItems} changed, ${parties.length} ledgers)`);
-  return { changed: true, stockGroups, voucherTypes, items };
+  return { changed: true, stockGroups, voucherTypes, items, changedParties };
 }
 
 /**
